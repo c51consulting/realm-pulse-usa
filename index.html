@@ -241,10 +241,10 @@
 
  <!-- Modal data & logic -->
  <script>
-  // Modal content definitions
-  const MODALS = {
-   weather: {
-    title: "Weather",
+  // ── Weather: region-specific data ──────────────────────────────────────────
+  const WEATHER_REGIONS = {
+   "corn-belt": {
+    label: "Corn Belt (IA, IL, IN, MO)",
     badge: { text: "Bearish for planting", color: "bg-amber-100 text-amber-800" },
     summary: "Persistent rainfall across the Corn Belt is delaying field work by an estimated 7\u201310 days relative to the 5-year average. Saturated soils are limiting early planting windows for corn and soybeans.",
     sections: [
@@ -252,28 +252,199 @@
       heading: "Current Conditions",
       items: [
        "Soil moisture at 110\u2013130% of normal across Iowa, Illinois, and Indiana.",
-       "Frost risk remains elevated through mid-May in northern Minnesota and the Dakotas.",
-       "Drought persists in the southern Plains (Kansas, Oklahoma), stressing winter wheat.",
+       "Frost risk remains elevated through mid-May; last safe transplant date ~May 15.",
+       "Above-normal precipitation forecast for the next 10 days; field work windows scarce.",
+       "Corn planting at 18% complete vs. 34% 5-year average; soybeans at 6% vs. 14%.",
       ],
      },
      {
       heading: "Key Drivers & Risks",
       items: [
-       "La Ni\u00f1a pattern sustaining above-normal precipitation in the Midwest.",
+       "La Ni\u00f1a pattern sustaining above-normal precipitation across the Midwest.",
        "Every week of planting delay past May 10 reduces corn yield potential by ~1 bu/acre.",
-       "Dry conditions in Brazil\u2019s second-crop (safrinha) corn region add export demand pressure on U.S. supplies.",
+       "Flooding risk along the Missouri and Illinois Rivers threatening low-lying fields.",
       ],
      },
      {
       heading: "Actionable Insights",
       items: [
-       "Monitor USDA weekly crop progress reports (released Mondays) for planting pace vs. 5-year average.",
+       "Monitor USDA weekly crop progress reports (Mondays) for planting pace vs. 5-year average.",
        "Consider forward-contracting corn if planting delays push futures above 480\u00a2/bu.",
-       "Evaluate crop insurance options for prevented planting coverage before the sign-up deadline.",
+       "Evaluate prevented-planting crop insurance coverage before the sign-up deadline.",
       ],
      },
     ],
+    crops: "Corn, Soybeans, Winter Wheat",
    },
+   "northern-plains": {
+    label: "Northern Plains (ND, SD, MN)",
+    badge: { text: "Cool & slow start", color: "bg-blue-100 text-blue-800" },
+    summary: "Cool temperatures and a late snowpack melt are delaying spring fieldwork across the Northern Plains. Soil moisture is near normal but frost risk extends well into late May, compressing the planting window for corn and sunflowers.",
+    sections: [
+     {
+      heading: "Current Conditions",
+      items: [
+       "Soil moisture at 95% of normal; adequate but not excessive in most areas.",
+       "Frost risk elevated through late May; hard freeze possible in northern ND through May 20.",
+       "Soil temperatures averaging 42\u201346\u00b0F \u2014 below the 50\u00b0F threshold needed for corn germination.",
+       "Spring wheat planting at 22% complete vs. 38% 5-year average.",
+      ],
+     },
+     {
+      heading: "Key Drivers & Risks",
+      items: [
+       "Persistent upper-level ridge blocking warm air from pushing north; pattern may break by late May.",
+       "Short growing season means every lost day of planting has outsized yield impact.",
+       "Sunflower and canola acres may shift to spring wheat if planting window narrows further.",
+      ],
+     },
+     {
+      heading: "Actionable Insights",
+      items: [
+       "Delay corn planting until soil temps reach 50\u00b0F consistently \u2014 cold-soil germination risks outweigh early-planting benefits.",
+       "Spring wheat can tolerate cooler soils; prioritize those acres first to capture the window.",
+       "Watch the 6\u201314 day outlooks from NOAA CPC for the first sustained warm pattern.",
+      ],
+     },
+    ],
+    crops: "Spring Wheat, Corn, Sunflowers, Canola, Soybeans",
+   },
+   "southern-plains": {
+    label: "Southern Plains (KS, OK, TX)",
+    badge: { text: "Drought stress", color: "bg-red-100 text-red-800" },
+    summary: "Drought conditions are intensifying across the Southern Plains, with soil moisture at 60\u201375% of normal. Winter wheat is under significant stress heading into the critical grain-fill period, and early summer heat is accelerating moisture loss.",
+    sections: [
+     {
+      heading: "Current Conditions",
+      items: [
+       "Soil moisture at 60\u201375% of normal; D2\u2013D3 drought covering 55% of Kansas and Oklahoma.",
+       "Winter wheat crop rated 38% good/excellent \u2014 down 12 points from last month.",
+       "Temperatures averaging 6\u20138\u00b0F above normal; accelerating evapotranspiration.",
+       "No meaningful precipitation in the 30-day outlook for western Kansas and the Texas Panhandle.",
+      ],
+     },
+     {
+      heading: "Key Drivers & Risks",
+      items: [
+       "Drought stress during grain fill can reduce winter wheat yields by 15\u201330% per USDA estimates.",
+       "Pasture and range conditions deteriorating; cattle producers facing early destocking decisions.",
+       "Risk of abandonment rising for dryland wheat acres in western Kansas and the Oklahoma Panhandle.",
+      ],
+     },
+     {
+      heading: "Actionable Insights",
+      items: [
+       "Scout winter wheat fields for head scab and aphid pressure \u2014 stressed crops are more vulnerable.",
+       "Cow-calf operators should evaluate early weaning to reduce forage demand on stressed pastures.",
+       "Consider crop insurance APH documentation now if abandonment becomes necessary.",
+      ],
+     },
+    ],
+    crops: "Winter Wheat, Grain Sorghum, Cotton, Cattle (Pasture)",
+   },
+   "pacific-northwest": {
+    label: "Pacific Northwest (WA, OR)",
+    badge: { text: "Cool & delayed", color: "bg-blue-100 text-blue-800" },
+    summary: "A cool, wet spring is delaying wheat emergence and early-season fieldwork across the Pacific Northwest. Soil moisture is above normal at 105% but temperatures remain too cool for optimal crop development.",
+    sections: [
+     {
+      heading: "Current Conditions",
+      items: [
+       "Soil moisture at 105% of normal; adequate water supply for dryland wheat.",
+       "Winter wheat emergence delayed 7\u201310 days vs. average due to cool soil temperatures.",
+       "Snowpack in the Cascades at 118% of normal \u2014 irrigation water supply is secure.",
+       "Frost risk persists through early May in the Columbia Basin and Palouse.",
+      ],
+     },
+     {
+      heading: "Key Drivers & Risks",
+      items: [
+       "Cool temperatures slowing tiller development in soft white winter wheat \u2014 yield potential not yet impaired.",
+       "Above-normal snowpack reduces drought risk but may delay spring planting on low-lying fields.",
+       "Strong export demand for PNW soft white wheat from Asian buyers supporting basis levels.",
+      ],
+     },
+     {
+      heading: "Actionable Insights",
+      items: [
+       "Monitor stripe rust pressure as cool, wet conditions are highly favorable for disease development.",
+       "Delay spring nitrogen top-dress applications until soils dry sufficiently to avoid compaction.",
+       "Secure export contracts early \u2014 Asian demand for soft white wheat is running ahead of last year.",
+      ],
+     },
+    ],
+    crops: "Soft White Wheat, Barley, Potatoes, Hops, Apples",
+   },
+   "california": {
+    label: "California",
+    badge: { text: "Drought concerns", color: "bg-orange-100 text-orange-800" },
+    summary: "California\u2019s soil moisture is at 70% of normal following a below-average wet season. Irrigation demand is rising early, and water allocation uncertainty for some districts is creating planning challenges for specialty crop and rice producers.",
+    sections: [
+     {
+      heading: "Current Conditions",
+      items: [
+       "Soil moisture at 70% of normal statewide; Central Valley conditions drier than average.",
+       "Sierra Nevada snowpack at 82% of normal \u2014 below average but not critically low.",
+       "Water allocations for some Central Valley Project contractors reduced to 75% of contract.",
+       "Temperatures 3\u20135\u00b0F above normal; evapotranspiration running ahead of seasonal norms.",
+      ],
+     },
+     {
+      heading: "Key Drivers & Risks",
+      items: [
+       "Reduced water allocations forcing some rice and cotton acres to fallow in the Sacramento Valley.",
+       "Almond and pistachio orchards entering critical hull-split period \u2014 irrigation timing is essential.",
+       "Groundwater pumping restrictions under SGMA limiting fallback options for some growers.",
+      ],
+     },
+     {
+      heading: "Actionable Insights",
+      items: [
+       "Audit irrigation system efficiency now \u2014 drip and micro-irrigation upgrades qualify for NRCS EQIP cost-share.",
+       "Rice growers should confirm water delivery schedules with their district before finalizing planted acres.",
+       "Specialty crop producers should have contingency plans for 10\u201315% water supply reductions.",
+      ],
+     },
+    ],
+    crops: "Almonds, Pistachios, Grapes, Rice, Cotton, Tomatoes",
+   },
+   "delta": {
+    label: "Delta (AR, MS, LA)",
+    badge: { text: "Flooding risk", color: "bg-red-100 text-red-800" },
+    summary: "Excessive rainfall has pushed soil moisture to 120% of normal across the Delta, with active flooding along the Mississippi River system. Rice and soybean planting is significantly behind pace, and standing water is threatening early-planted fields.",
+    sections: [
+     {
+      heading: "Current Conditions",
+      items: [
+       "Soil moisture at 120% of normal; widespread ponding in low-lying fields across Arkansas and Mississippi.",
+       "Mississippi River at or above flood stage at Memphis and Vicksburg gauges.",
+       "Rice planting at 12% complete vs. 28% 5-year average; soybeans at 8% vs. 20%.",
+       "Additional 2\u20133 inches of rainfall forecast over the next 7 days.",
+      ],
+     },
+     {
+      heading: "Key Drivers & Risks",
+      items: [
+       "Extended flooding can cause anoxic soil conditions, damaging early-planted soybean stands.",
+       "Rice fields require controlled flooding, but uncontrolled overflow damages levee systems.",
+       "Delayed planting past optimal windows reduces yield potential for both rice and soybeans.",
+      ],
+     },
+     {
+      heading: "Actionable Insights",
+      items: [
+       "Assess field drainage infrastructure now \u2014 pump capacity and outlet tile condition are critical.",
+       "Consider prevented-planting claims if fields remain flooded past the final planting date.",
+       "Scout emerged soybean fields for Phytophthora root rot \u2014 saturated soils dramatically increase infection risk.",
+      ],
+     },
+    ],
+    crops: "Rice, Soybeans, Cotton, Corn",
+   },
+  };
+
+  // ── All other modal content ─────────────────────────────────────────────────
+  const MODALS = {
 
    grains: {
     title: "Grains",
@@ -551,27 +722,69 @@
   const body     = document.getElementById("modal-body");
   const closeBtn = document.getElementById("modal-close");
 
-  // Build modal HTML from data
-  function buildModalHTML(data) {
-   const sectionsHTML = data.sections.map(function(section) {
-    const itemsHTML = section.items.map(function(item) {
+  // Build section list HTML shared by all modals
+  function buildSectionsHTML(sections) {
+   return sections.map(function(section) {
+    var itemsHTML = section.items.map(function(item) {
      return '<li class="flex gap-2 text-sm text-gray-700"><span class="mt-1 shrink-0 w-1.5 h-1.5 rounded-full bg-blue-400"></span><span>' + item + '</span></li>';
     }).join("");
     return '<div><h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">' + section.heading + '</h4><ul class="space-y-1.5">' + itemsHTML + '</ul></div><div class="border-t border-gray-100"></div>';
    }).join("");
+  }
 
+  // Build standard modal HTML from data
+  function buildModalHTML(data) {
    return '<div class="flex items-start justify-between gap-3 mb-1"><h3 id="modal-title" class="text-xl font-bold text-gray-900">' + data.title + '</h3><span class="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full ' + data.badge.color + '">' + data.badge.text + '</span></div>'
     + '<p class="text-sm text-gray-600 leading-relaxed">' + data.summary + '</p>'
     + '<div class="border-t border-gray-100"></div>'
-    + sectionsHTML;
+    + buildSectionsHTML(data.sections);
+  }
+
+  // Build the location-selector dropdown HTML
+  function buildRegionDropdown(selectedKey) {
+   var options = Object.keys(WEATHER_REGIONS).map(function(key) {
+    var selected = key === selectedKey ? ' selected' : '';
+    return '<option value="' + key + '"' + selected + '>' + WEATHER_REGIONS[key].label + '</option>';
+   }).join("");
+   return '<div class="flex items-center gap-2">'
+    + '<label for="weather-region-select" class="text-xs font-semibold text-gray-500 uppercase tracking-wider whitespace-nowrap">Your region</label>'
+    + '<select id="weather-region-select" class="flex-1 text-sm border border-gray-200 rounded-lg px-2.5 py-1.5 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer">'
+    + options
+    + '</select>'
+    + '</div>';
+  }
+
+  // Build weather modal HTML for a given region key
+  function buildWeatherHTML(regionKey) {
+   var r = WEATHER_REGIONS[regionKey];
+   return '<div class="flex items-start justify-between gap-3 mb-1"><h3 id="modal-title" class="text-xl font-bold text-gray-900">Weather</h3><span class="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full ' + r.badge.color + '">' + r.badge.text + '</span></div>'
+    + buildRegionDropdown(regionKey)
+    + '<p class="text-xs text-gray-400 -mt-1">Key crops: ' + r.crops + '</p>'
+    + '<p class="text-sm text-gray-600 leading-relaxed">' + r.summary + '</p>'
+    + '<div class="border-t border-gray-100"></div>'
+    + buildSectionsHTML(r.sections);
+  }
+
+  // Render weather modal content (used on open and on region change)
+  function renderWeatherRegion(regionKey) {
+   body.innerHTML = buildWeatherHTML(regionKey);
+   var select = document.getElementById("weather-region-select");
+   if (select) {
+    select.addEventListener("change", function() {
+     renderWeatherRegion(this.value);
+    });
+   }
   }
 
   // Open modal
   function openModal(key) {
-   var data = MODALS[key];
-   if (!data) return;
-
-   body.innerHTML = buildModalHTML(data);
+   if (key === "weather") {
+    renderWeatherRegion("corn-belt");
+   } else {
+    var data = MODALS[key];
+    if (!data) return;
+    body.innerHTML = buildModalHTML(data);
+   }
 
    backdrop.classList.remove("hidden");
    // Trigger animation on next frame
