@@ -6,85 +6,621 @@
  <title>REALM Pulse USA</title>
  <script src="https://cdn.tailwindcss.com"></script>
  <style>
- body {
- font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
- }
+  body {
+   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  }
+
+  /* Modal backdrop fade */
+  #modal-backdrop {
+   transition: opacity 0.2s ease;
+  }
+  #modal-backdrop.hidden {
+   opacity: 0;
+   pointer-events: none;
+  }
+
+  /* Modal panel slide-up */
+  #modal-panel {
+   transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  #modal-panel.modal-hidden {
+   opacity: 0;
+   transform: translateY(12px);
+  }
  </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
+
+ <!-- Modal overlay -->
+ <div
+  id="modal-backdrop"
+  class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="modal-title"
+ >
+  <div
+   id="modal-panel"
+   class="modal-hidden relative bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[85vh] overflow-y-auto"
+  >
+   <!-- Close button -->
+   <button
+    id="modal-close"
+    class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 transition-colors focus:outline-none"
+    aria-label="Close"
+   >
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+   </button>
+
+   <!-- Dynamic content injected here -->
+   <div id="modal-body" class="p-6 pr-12 space-y-5"></div>
+  </div>
+ </div>
+
+ <!-- Page content -->
  <div class="max-w-5xl mx-auto px-4 py-8 space-y-8">
- <header class="space-y-2">
- <h1 class="text-3xl md:text-4xl font-bold">REALM Pulse USA</h1>
- <p class="text-gray-600 text-base md:text-lg">
- Daily intelligence for agriculture &amp; assets
- </p>
- </header>
- <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
- <div class="bg-white shadow rounded-2xl p-4">
- <h2 class="font-semibold text-lg mb-1">Weather</h2>
- <p class="text-sm text-gray-700">
- Rain delays likely to slow planting; bullish for corn.
- </p>
+  <header class="space-y-2">
+   <h1 class="text-3xl md:text-4xl font-bold">REALM Pulse USA</h1>
+   <p class="text-gray-600 text-base md:text-lg">
+    Daily intelligence for agriculture &amp; assets
+   </p>
+  </header>
+
+  <!-- Cards grid -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+
+   <!-- Weather -->
+   <div
+    class="bg-white shadow rounded-2xl p-4 cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 group"
+    data-modal="weather"
+    role="button"
+    tabindex="0"
+    aria-label="Open Weather details"
+   >
+    <div class="flex items-center justify-between mb-1">
+     <h2 class="font-semibold text-lg">Weather</h2>
+     <span class="text-gray-300 group-hover:text-blue-400 transition-colors text-xs font-medium tracking-wide uppercase">Details &rarr;</span>
+    </div>
+    <p class="text-sm text-gray-700">
+     Rain delays likely to slow planting; bullish for corn.
+    </p>
+   </div>
+
+   <!-- Grains -->
+   <div
+    class="bg-white shadow rounded-2xl p-4 cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 group"
+    data-modal="grains"
+    role="button"
+    tabindex="0"
+    aria-label="Open Grains details"
+   >
+    <div class="flex items-center justify-between mb-1">
+     <h2 class="font-semibold text-lg">Grains</h2>
+     <span class="text-gray-300 group-hover:text-blue-400 transition-colors text-xs font-medium tracking-wide uppercase">Details &rarr;</span>
+    </div>
+    <p class="text-sm text-gray-700">
+     Corn 466.25&cent;/bu, down 0.75%; up 9% this month.
+    </p>
+   </div>
+
+   <!-- Dairy -->
+   <div
+    class="bg-white shadow rounded-2xl p-4 cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 group"
+    data-modal="dairy"
+    role="button"
+    tabindex="0"
+    aria-label="Open Dairy details"
+   >
+    <div class="flex items-center justify-between mb-1">
+     <h2 class="font-semibold text-lg">Dairy (Milk Classes)</h2>
+     <span class="text-gray-300 group-hover:text-blue-400 transition-colors text-xs font-medium tracking-wide uppercase">Details &rarr;</span>
+    </div>
+    <p class="text-sm text-gray-700">
+     Class III milk $14.94/cwt (Feb 2026); prices rising.
+    </p>
+   </div>
+
+   <!-- Cattle -->
+   <div
+    class="bg-white shadow rounded-2xl p-4 cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 group"
+    data-modal="cattle"
+    role="button"
+    tabindex="0"
+    aria-label="Open Cattle details"
+   >
+    <div class="flex items-center justify-between mb-1">
+     <h2 class="font-semibold text-lg">Cattle</h2>
+     <span class="text-gray-300 group-hover:text-blue-400 transition-colors text-xs font-medium tracking-wide uppercase">Details &rarr;</span>
+    </div>
+    <p class="text-sm text-gray-700">
+     Live cattle 238.525&cent;/lb; supply tight due to Nebraska fires.
+    </p>
+   </div>
+
+   <!-- Fuel & Energy -->
+   <div
+    class="bg-white shadow rounded-2xl p-4 cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 group"
+    data-modal="fuel"
+    role="button"
+    tabindex="0"
+    aria-label="Open Fuel and Energy details"
+   >
+    <div class="flex items-center justify-between mb-1">
+     <h2 class="font-semibold text-lg">Fuel &amp; Energy</h2>
+     <span class="text-gray-300 group-hover:text-blue-400 transition-colors text-xs font-medium tracking-wide uppercase">Details &rarr;</span>
+    </div>
+    <p class="text-sm text-gray-700">
+     WTI crude $96.11/bbl; diesel $5.16/gal. Energy costs drive up transport &amp; inputs.
+    </p>
+   </div>
+
+   <!-- S&P 500 -->
+   <div
+    class="bg-white shadow rounded-2xl p-4 cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 group"
+    data-modal="sp500"
+    role="button"
+    tabindex="0"
+    aria-label="Open S&amp;P 500 details"
+   >
+    <div class="flex items-center justify-between mb-1">
+     <h2 class="font-semibold text-lg">S&amp;P 500</h2>
+     <span class="text-gray-300 group-hover:text-blue-400 transition-colors text-xs font-medium tracking-wide uppercase">Details &rarr;</span>
+    </div>
+    <p class="text-sm text-gray-700">
+     Index 6,606.49; down 0.3%. Market skittish on oil &amp; geopolitics.
+    </p>
+   </div>
+
+   <!-- Machinery -->
+   <div
+    class="bg-white shadow rounded-2xl p-4 cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 group"
+    data-modal="machinery"
+    role="button"
+    tabindex="0"
+    aria-label="Open Machinery details"
+   >
+    <div class="flex items-center justify-between mb-1">
+     <h2 class="font-semibold text-lg">Machinery</h2>
+     <span class="text-gray-300 group-hover:text-blue-400 transition-colors text-xs font-medium tracking-wide uppercase">Details &rarr;</span>
+    </div>
+    <p class="text-sm text-gray-700">
+     Equipment prices up 21% since 2020; tariffs &amp; rates squeeze buyers.
+    </p>
+   </div>
+
+   <!-- Fertilizer -->
+   <div
+    class="bg-white shadow rounded-2xl p-4 cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 group"
+    data-modal="fertilizer"
+    role="button"
+    tabindex="0"
+    aria-label="Open Fertilizer details"
+   >
+    <div class="flex items-center justify-between mb-1">
+     <h2 class="font-semibold text-lg">Fertilizer</h2>
+     <span class="text-gray-300 group-hover:text-blue-400 transition-colors text-xs font-medium tracking-wide uppercase">Details &rarr;</span>
+    </div>
+    <p class="text-sm text-gray-700">
+     Urea ~$450/ton; prices ~30% higher due to Strait of Hormuz tensions.
+    </p>
+   </div>
+
+   <!-- Chemicals -->
+   <div
+    class="bg-white shadow rounded-2xl p-4 cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 group"
+    data-modal="chemicals"
+    role="button"
+    tabindex="0"
+    aria-label="Open Chemicals details"
+   >
+    <div class="flex items-center justify-between mb-1">
+     <h2 class="font-semibold text-lg">Chemicals</h2>
+     <span class="text-gray-300 group-hover:text-blue-400 transition-colors text-xs font-medium tracking-wide uppercase">Details &rarr;</span>
+    </div>
+    <p class="text-sm text-gray-700">
+     Crop protection budgets up 4&ndash;6%; tariffs lift costs for key ingredients.
+    </p>
+   </div>
+
+  </div>
+
+  <!-- Subscribe section -->
+  <section class="bg-gray-50 border border-gray-200 rounded-2xl p-6 space-y-4">
+   <h3 class="text-xl font-semibold">Get the daily drop</h3>
+   <p class="text-sm text-gray-600">
+    Subscribe to receive this snapshot and our weekly deep dive straight to your inbox.
+   </p>
+   <div class="flex flex-col sm:flex-row gap-3">
+    <input type="email" placeholder="Enter your email" class="flex-1 p-2 border rounded-md" />
+    <button class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">Subscribe</button>
+   </div>
+  </section>
  </div>
- <div class="bg-white shadow rounded-2xl p-4">
- <h2 class="font-semibold text-lg mb-1">Grains</h2>
- <p class="text-sm text-gray-700">
- Corn 466.25¢/bu, down 0.75%; up 9% this month.
- </p>
- </div>
- <div class="bg-white shadow rounded-2xl p-4">
- <h2 class="font-semibold text-lg mb-1">Dairy (Milk Classes)</h2>
- <p class="text-sm text-gray-700">
- Class III milk $14.94/cwt (Feb 2026); prices rising.
- </p>
- </div>
- <div class="bg-white shadow rounded-2xl p-4">
- <h2 class="font-semibold text-lg mb-1">Cattle</h2>
- <p class="text-sm text-gray-700">
- Live cattle 238.525¢/lb; supply tight due to Nebraska fires.
- </p>
- </div>
- <div class="bg-white shadow rounded-2xl p-4">
- <h2 class="font-semibold text-lg mb-1">Fuel &amp; Energy</h2>
- <p class="text-sm text-gray-700">
- WTI crude $96.11/bbl; diesel $5.16/gal. Energy costs drive up transport &amp; inputs.
- </p>
- </div>
- <div class="bg-white shadow rounded-2xl p-4">
- <h2 class="font-semibold text-lg mb-1">S&amp;P 500</h2>
- <p class="text-sm text-gray-700">
- Index 6,606.49; down 0.3%. Market skittish on oil &amp; geopolitics.
- </p>
- </div>
- <div class="bg-white shadow rounded-2xl p-4">
- <h2 class="font-semibold text-lg mb-1">Machinery</h2>
- <p class="text-sm text-gray-700">
- Equipment prices up 21% since 2020; tariffs &amp; rates squeeze buyers.
- </p>
- </div>
- <div class="bg-white shadow rounded-2xl p-4">
- <h2 class="font-semibold text-lg mb-1">Fertilizer</h2>
- <p class="text-sm text-gray-700">
- Urea ~$450/ton; prices ~30% higher due to Strait of Hormuz tensions.
- </p>
- </div>
- <div class="bg-white shadow rounded-2xl p-4">
- <h2 class="font-semibold text-lg mb-1">Chemicals</h2>
- <p class="text-sm text-gray-700">
- Crop protection budgets up 4–6%; tariffs lift costs for key ingredients.
- </p>
- </div>
- </div>
- <section class="bg-gray-50 border border-gray-200 rounded-2xl p-6 space-y-4">
- <h3 class="text-xl font-semibold">Get the daily drop</h3>
- <p class="text-sm text-gray-600">
- Subscribe to receive this snapshot and our weekly deep dive straight to your inbox.
- </p>
- <div class="flex flex-col sm:flex-row gap-3">
- <input type="email" placeholder="Enter your email" class="flex-1 p-2 border rounded-md" />
- <button class="px-4 py-2 bg-blue-600 text-white rounded-md">Subscribe</button>
- </div>
- </section>
- </div>
+
+ <!-- Modal data & logic -->
+ <script>
+  // Modal content definitions
+  const MODALS = {
+   weather: {
+    title: "Weather",
+    badge: { text: "Bearish for planting", color: "bg-amber-100 text-amber-800" },
+    summary: "Persistent rainfall across the Corn Belt is delaying field work by an estimated 7\u201310 days relative to the 5-year average. Saturated soils are limiting early planting windows for corn and soybeans.",
+    sections: [
+     {
+      heading: "Current Conditions",
+      items: [
+       "Soil moisture at 110\u2013130% of normal across Iowa, Illinois, and Indiana.",
+       "Frost risk remains elevated through mid-May in northern Minnesota and the Dakotas.",
+       "Drought persists in the southern Plains (Kansas, Oklahoma), stressing winter wheat.",
+      ],
+     },
+     {
+      heading: "Key Drivers & Risks",
+      items: [
+       "La Ni\u00f1a pattern sustaining above-normal precipitation in the Midwest.",
+       "Every week of planting delay past May 10 reduces corn yield potential by ~1 bu/acre.",
+       "Dry conditions in Brazil\u2019s second-crop (safrinha) corn region add export demand pressure on U.S. supplies.",
+      ],
+     },
+     {
+      heading: "Actionable Insights",
+      items: [
+       "Monitor USDA weekly crop progress reports (released Mondays) for planting pace vs. 5-year average.",
+       "Consider forward-contracting corn if planting delays push futures above 480\u00a2/bu.",
+       "Evaluate crop insurance options for prevented planting coverage before the sign-up deadline.",
+      ],
+     },
+    ],
+   },
+
+   grains: {
+    title: "Grains",
+    badge: { text: "Bullish momentum", color: "bg-green-100 text-green-800" },
+    summary: "Corn futures are up 9% month-over-month, driven by weather-related supply concerns and strong ethanol demand. Wheat and soybeans are also firming on export competition and South American crop uncertainty.",
+    sections: [
+     {
+      heading: "Price Snapshot",
+      items: [
+       "Corn (Dec futures): 466.25\u00a2/bu \u2014 down 0.75% today, up 9% MTD.",
+       "Soybeans (Nov futures): 1,142\u00a2/bu \u2014 up 1.2% on the week.",
+       "Chicago SRW Wheat (Jul futures): 598\u00a2/bu \u2014 up 3.5% on Black Sea supply concerns.",
+      ],
+     },
+     {
+      heading: "Key Drivers & Risks",
+      items: [
+       "USDA May WASDE report expected to tighten corn ending stocks on reduced planted-area estimates.",
+       "Strong ethanol margins supporting corn basis in the eastern Corn Belt.",
+       "China\u2019s soybean import pace running 8% below year-ago levels \u2014 a demand headwind.",
+       "Russian wheat export quotas and Black Sea shipping disruptions tightening global supply.",
+      ],
+     },
+     {
+      heading: "Actionable Insights",
+      items: [
+       "Producers with unpriced 2025 corn should evaluate scale-up selling between 470\u2013490\u00a2/bu.",
+       "Watch the weekly EIA ethanol production report for demand signals.",
+       "Soybean basis in the Gulf is historically strong \u2014 consider basis contracts before harvest pressure.",
+      ],
+     },
+    ],
+   },
+
+   dairy: {
+    title: "Dairy (Milk Classes)",
+    badge: { text: "Prices rising", color: "bg-green-100 text-green-800" },
+    summary: "Class III milk prices have recovered to $14.94/cwt for February 2026 after a prolonged trough. Cheese demand and tightening milk supplies are the primary drivers, though elevated feed costs continue to compress margins.",
+    sections: [
+     {
+      heading: "Price Snapshot",
+      items: [
+       "Class II (fluid/cream): $17.82/cwt \u2014 stable, supported by strong domestic fluid demand.",
+       "Class III (cheese): $14.94/cwt \u2014 up $1.20/cwt from the prior month.",
+       "Class IV (butter/powder): $16.45/cwt \u2014 butter prices near multi-year highs at $2.85/lb.",
+      ],
+     },
+     {
+      heading: "Key Drivers & Risks",
+      items: [
+       "U.S. cheese stocks below 5-year average, supporting Class III prices.",
+       "Butter exports to Southeast Asia accelerating, tightening domestic supply.",
+       "Corn and soybean meal feed costs remain elevated, squeezing producer margins despite higher milk prices.",
+       "Herd liquidation in 2023\u201324 has reduced national milk cow numbers by ~1.5%.",
+      ],
+     },
+     {
+      heading: "Actionable Insights",
+      items: [
+       "Dairy producers should evaluate Class III futures hedges in the $15.50\u2013$16.00/cwt range for Q3 2026.",
+       "Monitor CME spot cheese and butter prices daily \u2014 they are the leading indicator for Class III/IV settlements.",
+       "Feed cost management (locking in corn/soybean meal) is as important as milk price hedging right now.",
+      ],
+     },
+    ],
+   },
+
+   cattle: {
+    title: "Cattle",
+    badge: { text: "Supply constrained", color: "bg-red-100 text-red-800" },
+    summary: "Live cattle futures are at historic highs near 238.525\u00a2/lb as the U.S. beef cow herd sits at its smallest level since 1951. Nebraska wildfires have further tightened near-term feeder cattle availability.",
+    sections: [
+     {
+      heading: "Price Snapshot",
+      items: [
+       "Live Cattle (Jun futures): 238.525\u00a2/lb \u2014 near all-time highs.",
+       "Feeder Cattle (Aug futures): 268.10\u00a2/lb \u2014 up 4% on the month.",
+       "Choice boxed beef cutout: $318.45/cwt \u2014 strong retail and foodservice demand.",
+      ],
+     },
+     {
+      heading: "Key Drivers & Risks",
+      items: [
+       "U.S. beef cow herd at 28.2 million head \u2014 lowest since 1951 per USDA January inventory.",
+       "Nebraska and Kansas wildfires destroyed an estimated 30,000\u201350,000 head and significant pasture acreage.",
+       "Drought in the southern Plains limiting grass-based stocker programs and delaying herd rebuilding.",
+       "Strong consumer demand for beef despite record retail prices \u2014 demand destruction risk if prices rise further.",
+      ],
+     },
+     {
+      heading: "Actionable Insights",
+      items: [
+       "Cattle feeders should lock in feeder cattle purchases now \u2014 prices are unlikely to soften materially before fall.",
+       "Cow-calf operators in drought areas should evaluate early weaning and culling strategies to preserve forage.",
+       "Packers and retailers should monitor weekly slaughter numbers \u2014 any uptick signals herd liquidation, not rebuilding.",
+      ],
+     },
+    ],
+   },
+
+   fuel: {
+    title: "Fuel & Energy",
+    badge: { text: "Cost pressure elevated", color: "bg-red-100 text-red-800" },
+    summary: "WTI crude at $96.11/bbl and on-highway diesel at $5.16/gal are adding significant cost pressure across the agricultural supply chain \u2014 from field operations to grain transportation and input delivery.",
+    sections: [
+     {
+      heading: "Price Snapshot",
+      items: [
+       "WTI Crude Oil: $96.11/bbl \u2014 up 18% year-to-date.",
+       "On-highway diesel: $5.16/gal (national average) \u2014 up $0.42/gal from 90 days ago.",
+       "Natural gas (Henry Hub): $3.82/MMBtu \u2014 elevated, impacting nitrogen fertilizer production costs.",
+       "Propane (grain drying): $0.98/gal \u2014 seasonal demand building ahead of harvest.",
+      ],
+     },
+     {
+      heading: "Key Drivers & Risks",
+      items: [
+       "OPEC+ production cuts of 1.66 million bbl/day remain in effect through year-end.",
+       "Geopolitical tensions in the Middle East creating a $5\u2013$8/bbl risk premium in crude prices.",
+       "Diesel demand from agriculture, trucking, and construction competing for tight refinery output.",
+       "High natural gas prices flowing through to ammonia and urea production costs.",
+      ],
+     },
+     {
+      heading: "Actionable Insights",
+      items: [
+       "Lock in diesel contracts for harvest season now \u2014 fall demand typically pushes prices higher.",
+       "Evaluate propane storage fill strategies before September to avoid peak-season pricing.",
+       "Factor $5.25\u2013$5.50/gal diesel into 2025 crop budgets; current prices may not be the ceiling.",
+      ],
+     },
+    ],
+   },
+
+   sp500: {
+    title: "S&P 500",
+    badge: { text: "Cautious sentiment", color: "bg-amber-100 text-amber-800" },
+    summary: "The S&P 500 at 6,606.49 is showing mild weakness as investors weigh elevated energy prices, geopolitical risk, and the Federal Reserve\u2019s higher-for-longer rate posture. Agricultural equities are outperforming the broader index.",
+    sections: [
+     {
+      heading: "Market Snapshot",
+      items: [
+       "S&P 500: 6,606.49 \u2014 down 0.3% today, up 4.1% YTD.",
+       "Ag sector (MOO ETF): up 7.2% YTD \u2014 outperforming on commodity tailwinds.",
+       "10-year Treasury yield: 4.68% \u2014 keeping financing costs elevated for farm equipment and land.",
+       "USD Index (DXY): 104.2 \u2014 a strong dollar headwinds U.S. grain export competitiveness.",
+      ],
+     },
+     {
+      heading: "Key Drivers & Risks",
+      items: [
+       "Fed funds rate at 5.25\u20135.50%; no cuts expected before Q4 2025 \u2014 sustaining high borrowing costs.",
+       "Energy sector gains offsetting weakness in consumer discretionary and tech.",
+       "Geopolitical risk premium (Middle East, Ukraine) keeping volatility (VIX) elevated near 18.",
+       "Strong dollar making U.S. corn and soybeans less competitive vs. Brazilian and Argentine exports.",
+      ],
+     },
+     {
+      heading: "Actionable Insights",
+      items: [
+       "High interest rates make cash flow management critical \u2014 prioritize paying down variable-rate operating lines.",
+       "Ag-sector equities (DE, CTVA, NTR) may offer portfolio exposure to commodity upside with less volatility than futures.",
+       "A strong dollar is a headwind for grain exports \u2014 watch weekly USDA export sales reports for demand signals.",
+      ],
+     },
+    ],
+   },
+
+   machinery: {
+    title: "Machinery",
+    badge: { text: "Buyers under pressure", color: "bg-red-100 text-red-800" },
+    summary: "New farm equipment prices are up 21% since 2020, driven by supply chain normalization costs, steel tariffs, and elevated dealer margins. High interest rates are compounding the affordability challenge for producers.",
+    sections: [
+     {
+      heading: "Market Snapshot",
+      items: [
+       "New large row-crop tractor (200+ hp): avg. $350,000\u2013$420,000 \u2014 up ~21% since 2020.",
+       "New combine (flagship models): $600,000\u2013$750,000 \u2014 lead times extending to 12\u201318 months.",
+       "Used equipment values remain elevated but softening as new inventory improves.",
+       "Dealer financing rates: 7.5\u20139.0% APR \u2014 up from 2\u20133% in 2021.",
+      ],
+     },
+     {
+      heading: "Key Drivers & Risks",
+      items: [
+       "Section 232 steel and aluminum tariffs adding $8,000\u2013$15,000 per unit to manufacturing costs.",
+       "Semiconductor shortages easing but precision ag component lead times remain extended.",
+       "Deere & Co. and CNH Industrial both raised list prices 5\u20137% in January 2025.",
+       "High financing costs pushing producers toward used equipment and extended service life strategies.",
+      ],
+     },
+     {
+      heading: "Actionable Insights",
+      items: [
+       "Evaluate lease vs. buy carefully at current rates \u2014 operating leases may preserve cash flow better than financed purchases.",
+       "Used equipment with under 2,000 hours remains a strong value relative to new \u2014 act before values firm further.",
+       "Negotiate multi-year service contracts now; parts and labor costs are also trending higher.",
+      ],
+     },
+    ],
+   },
+
+   fertilizer: {
+    title: "Fertilizer",
+    badge: { text: "Prices elevated", color: "bg-amber-100 text-amber-800" },
+    summary: "Urea prices near $450/ton are approximately 30% above year-ago levels, driven by Strait of Hormuz shipping disruptions and tightening global natural gas supply. Producers face a difficult timing decision heading into spring application.",
+    sections: [
+     {
+      heading: "Price Snapshot",
+      items: [
+       "Urea (NOLA barge): ~$450/ton \u2014 up ~30% year-over-year.",
+       "DAP (diammonium phosphate): ~$620/ton \u2014 up 18% on Moroccan export restrictions.",
+       "Potash (MOP): ~$310/ton \u2014 relatively stable; Canadian supply intact.",
+       "Anhydrous ammonia: ~$780/ton \u2014 elevated on natural gas cost pass-through.",
+      ],
+     },
+     {
+      heading: "Key Drivers & Risks",
+      items: [
+       "Strait of Hormuz tensions disrupting Middle Eastern urea and ammonia shipments to the U.S. Gulf.",
+       "European natural gas prices elevated, reducing EU nitrogen fertilizer production and increasing U.S. import demand.",
+       "China\u2019s urea export restrictions (in place since late 2024) removing a key global supply source.",
+       "Domestic U.S. nitrogen production running near capacity \u2014 limited ability to offset import shortfalls.",
+      ],
+     },
+     {
+      heading: "Actionable Insights",
+      items: [
+       "Producers who haven\u2019t secured spring nitrogen should act now \u2014 prices are unlikely to soften before planting.",
+       "Consider split-application strategies to reduce upfront cost and improve nitrogen use efficiency.",
+       "Evaluate enhanced efficiency fertilizers (urease/nitrification inhibitors) to reduce total N rates without yield penalty.",
+      ],
+     },
+    ],
+   },
+
+   chemicals: {
+    title: "Chemicals",
+    badge: { text: "Cost creep", color: "bg-amber-100 text-amber-800" },
+    summary: "Crop protection budgets are rising 4\u20136% year-over-year as tariffs on Chinese active ingredients and elevated logistics costs flow through to retail herbicide and insecticide prices. Generic competition is providing partial relief.",
+    sections: [
+     {
+      heading: "Market Snapshot",
+      items: [
+       "Glyphosate (generic): ~$14.50/gal \u2014 down 8% from 2023 peak but still above pre-2021 levels.",
+       "Dicamba (branded): up ~12% on reformulation and stewardship compliance costs.",
+       "Fungicide programs: up 6\u20139% on active ingredient supply tightness from China.",
+       "Insecticides (pyrethroids): relatively stable; generic supply from India offsetting China tariff impact.",
+      ],
+     },
+     {
+      heading: "Key Drivers & Risks",
+      items: [
+       "Section 301 tariffs on Chinese agrochemical active ingredients (25%) flowing through to retail prices.",
+       "EPA re-registration reviews creating uncertainty for several key herbicide and fungicide products.",
+       "Consolidation among distributors reducing price competition at the retail level.",
+       "Resistance management pressures increasing the number of required applications and product rotations.",
+      ],
+     },
+     {
+      heading: "Actionable Insights",
+      items: [
+       "Lock in herbicide and fungicide contracts for the full season now \u2014 in-season spot prices typically run 10\u201315% higher.",
+       "Evaluate generic alternatives for glyphosate and atrazine programs \u2014 quality is comparable at meaningfully lower cost.",
+       "Work with agronomists to audit application rates; over-application is common and represents recoverable cost savings.",
+      ],
+     },
+    ],
+   },
+  };
+
+  // DOM references
+  const backdrop = document.getElementById("modal-backdrop");
+  const panel    = document.getElementById("modal-panel");
+  const body     = document.getElementById("modal-body");
+  const closeBtn = document.getElementById("modal-close");
+
+  // Build modal HTML from data
+  function buildModalHTML(data) {
+   const sectionsHTML = data.sections.map(function(section) {
+    const itemsHTML = section.items.map(function(item) {
+     return '<li class="flex gap-2 text-sm text-gray-700"><span class="mt-1 shrink-0 w-1.5 h-1.5 rounded-full bg-blue-400"></span><span>' + item + '</span></li>';
+    }).join("");
+    return '<div><h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">' + section.heading + '</h4><ul class="space-y-1.5">' + itemsHTML + '</ul></div><div class="border-t border-gray-100"></div>';
+   }).join("");
+
+   return '<div class="flex items-start justify-between gap-3 mb-1"><h3 id="modal-title" class="text-xl font-bold text-gray-900">' + data.title + '</h3><span class="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full ' + data.badge.color + '">' + data.badge.text + '</span></div>'
+    + '<p class="text-sm text-gray-600 leading-relaxed">' + data.summary + '</p>'
+    + '<div class="border-t border-gray-100"></div>'
+    + sectionsHTML;
+  }
+
+  // Open modal
+  function openModal(key) {
+   var data = MODALS[key];
+   if (!data) return;
+
+   body.innerHTML = buildModalHTML(data);
+
+   backdrop.classList.remove("hidden");
+   // Trigger animation on next frame
+   requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+     panel.classList.remove("modal-hidden");
+    });
+   });
+
+   document.body.style.overflow = "hidden";
+   closeBtn.focus();
+  }
+
+  // Close modal
+  function closeModal() {
+   panel.classList.add("modal-hidden");
+   setTimeout(function() {
+    backdrop.classList.add("hidden");
+    body.innerHTML = "";
+    document.body.style.overflow = "";
+   }, 200);
+  }
+
+  // Card clicks
+  document.querySelectorAll("[data-modal]").forEach(function(card) {
+   card.addEventListener("click", function() { openModal(card.dataset.modal); });
+   card.addEventListener("keydown", function(e) {
+    if (e.key === "Enter" || e.key === " ") {
+     e.preventDefault();
+     openModal(card.dataset.modal);
+    }
+   });
+  });
+
+  // Close button
+  closeBtn.addEventListener("click", closeModal);
+
+  // Click outside panel
+  backdrop.addEventListener("click", function(e) {
+   if (e.target === backdrop) closeModal();
+  });
+
+  // Escape key
+  document.addEventListener("keydown", function(e) {
+   if (e.key === "Escape" && !backdrop.classList.contains("hidden")) {
+    closeModal();
+   }
+  });
+ </script>
+
 </body>
 </html>
