@@ -66,6 +66,11 @@
    <p class="text-gray-600 text-base md:text-lg">
     Daily intelligence for agriculture &amp; assets
    </p>
+   <div class="flex flex-col sm:flex-row sm:items-center gap-0.5 sm:gap-3 pt-0.5">
+    <p id="header-last-updated" class="text-xs text-gray-400">Last updated: —</p>
+    <span class="hidden sm:inline text-gray-300 text-xs">·</span>
+    <p class="text-xs text-gray-400">Daily updates at 6 AM ET</p>
+   </div>
   </header>
 
   <!-- Cards grid -->
@@ -86,6 +91,7 @@
     <p class="text-sm text-gray-700">
      Rain delays likely to slow planting; bullish for corn.
     </p>
+    <p id="ts-weather" class="mt-2 text-xs text-gray-400 text-right">Updated: —</p>
    </div>
 
    <!-- Grains -->
@@ -103,6 +109,7 @@
     <p class="text-sm text-gray-700">
      Corn 466.25&cent;/bu, down 0.75%; up 9% this month.
     </p>
+    <p id="ts-grains" class="mt-2 text-xs text-gray-400 text-right">Updated: —</p>
    </div>
 
    <!-- Dairy -->
@@ -120,6 +127,7 @@
     <p class="text-sm text-gray-700">
      Class III milk $14.94/cwt (Feb 2026); prices rising.
     </p>
+    <p id="ts-dairy" class="mt-2 text-xs text-gray-400 text-right">Updated: —</p>
    </div>
 
    <!-- Cattle -->
@@ -137,6 +145,7 @@
     <p class="text-sm text-gray-700">
      Live cattle 238.525&cent;/lb; supply tight due to Nebraska fires.
     </p>
+    <p id="ts-cattle" class="mt-2 text-xs text-gray-400 text-right">Updated: —</p>
    </div>
 
    <!-- Fuel & Energy -->
@@ -154,6 +163,7 @@
     <p class="text-sm text-gray-700">
      WTI crude $96.11/bbl; diesel $5.16/gal. Energy costs drive up transport &amp; inputs.
     </p>
+    <p id="ts-fuel" class="mt-2 text-xs text-gray-400 text-right">Updated: —</p>
    </div>
 
    <!-- S&P 500 -->
@@ -171,6 +181,7 @@
     <p class="text-sm text-gray-700">
      Index 6,606.49; down 0.3%. Market skittish on oil &amp; geopolitics.
     </p>
+    <p id="ts-sp500" class="mt-2 text-xs text-gray-400 text-right">Updated: —</p>
    </div>
 
    <!-- Machinery -->
@@ -188,6 +199,7 @@
     <p class="text-sm text-gray-700">
      Equipment prices up 21% since 2020; tariffs &amp; rates squeeze buyers.
     </p>
+    <p id="ts-machinery" class="mt-2 text-xs text-gray-400 text-right">Updated: —</p>
    </div>
 
    <!-- Fertilizer -->
@@ -205,6 +217,7 @@
     <p class="text-sm text-gray-700">
      Urea ~$450/ton; prices ~30% higher due to Strait of Hormuz tensions.
     </p>
+    <p id="ts-fertilizer" class="mt-2 text-xs text-gray-400 text-right">Updated: —</p>
    </div>
 
    <!-- Chemicals -->
@@ -222,6 +235,7 @@
     <p class="text-sm text-gray-700">
      Crop protection budgets up 4&ndash;6%; tariffs lift costs for key ingredients.
     </p>
+    <p id="ts-chemicals" class="mt-2 text-xs text-gray-400 text-right">Updated: —</p>
    </div>
 
   </div>
@@ -1161,6 +1175,94 @@
     ],
    },
   };
+
+  // ── Timestamp logic ────────────────────────────────────────────────────────
+
+  // Stored fetch timestamps keyed by card id (matches data-modal values)
+  var cardTimestamps = {};
+
+  // Format a Date into "March 21, 2026 at 6:15 AM ET" style using the
+  // user's local timezone, with the IANA short timezone name appended.
+  function formatFullTimestamp(date) {
+   var datePart = date.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+   });
+   var timePart = date.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    timeZoneName: "short",
+   });
+   return datePart + " at " + timePart;
+  }
+
+  // Format a Date into a compact card timestamp: "6:15 AM ET"
+  function formatCardTimestamp(date) {
+   return date.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    timeZoneName: "short",
+   });
+  }
+
+  // Update the header "Last updated" line with the most recent timestamp
+  // across all cards (or a supplied date).
+  function updateHeaderTimestamp(date) {
+   var el = document.getElementById("header-last-updated");
+   if (el) {
+    el.textContent = "Last updated: " + formatFullTimestamp(date);
+   }
+  }
+
+  // Update a single card's timestamp element.
+  function updateCardTimestamp(cardKey, date) {
+   var el = document.getElementById("ts-" + cardKey);
+   if (el) {
+    el.textContent = "Updated: " + formatCardTimestamp(date);
+   }
+  }
+
+  // Record that a card's data was just fetched and refresh its display.
+  // cardKey must match the data-modal attribute (e.g. "weather", "grains").
+  function recordFetch(cardKey) {
+   var now = new Date();
+   cardTimestamps[cardKey] = now;
+   updateCardTimestamp(cardKey, now);
+
+   // Header shows the most recent fetch across all cards.
+   updateHeaderTimestamp(now);
+  }
+
+  // Cron-sourced cards (USDA, EIA, Alpha Vantage) share a single daily
+  // fetch time. Call this once with the server-provided ISO timestamp
+  // (or call it without an argument to use the current time as a fallback).
+  function recordCronFetch(isoTimestamp) {
+   var date = isoTimestamp ? new Date(isoTimestamp) : new Date();
+   var cronCards = ["grains", "dairy", "cattle", "fuel", "sp500",
+                    "machinery", "fertilizer", "chemicals"];
+   cronCards.forEach(function(key) {
+    cardTimestamps[key] = date;
+    updateCardTimestamp(key, date);
+   });
+   updateHeaderTimestamp(date);
+  }
+
+  // Initialise timestamps on page load.
+  // In production, replace the placeholder ISO string with the actual
+  // server-injected cron timestamp (e.g. via a <meta> tag or inline var).
+  (function initTimestamps() {
+   // Attempt to read a server-injected cron timestamp from a meta tag:
+   //   <meta name="data-fetched-at" content="2026-03-21T11:15:00Z">
+   var meta = document.querySelector("meta[name='data-fetched-at']");
+   var cronISO = meta ? meta.getAttribute("content") : null;
+
+   // Seed cron-sourced cards with the server timestamp (or now if absent).
+   recordCronFetch(cronISO);
+
+   // Weather is client-side — mark it as fetched at page load time.
+   recordFetch("weather");
+  })();
 
   // DOM references
   const backdrop = document.getElementById("modal-backdrop");
