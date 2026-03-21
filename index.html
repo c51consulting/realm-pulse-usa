@@ -443,13 +443,13 @@
    },
   };
 
-  // ── All other modal content ─────────────────────────────────────────────────
-  const MODALS = {
-
-   grains: {
-    title: "Grains",
+  // ── Grains: region-specific data ───────────────────────────────────────────
+  const GRAINS_REGIONS = {
+   "corn-belt": {
+    label: "Corn Belt (IA, IL, IN, MO)",
     badge: { text: "Bullish momentum", color: "bg-green-100 text-green-800" },
-    summary: "Corn futures are up 9% month-over-month, driven by weather-related supply concerns and strong ethanol demand. Wheat and soybeans are also firming on export competition and South American crop uncertainty.",
+    summary: "Corn futures are up 9% month-over-month, driven by weather-related planting delays and strong ethanol demand. Soybean basis in the eastern Corn Belt is historically firm as export demand competes with domestic crush.",
+    crops: "Corn, Soybeans, Winter Wheat",
     sections: [
      {
       heading: "Price Snapshot",
@@ -457,93 +457,550 @@
        "Corn (Dec futures): 466.25\u00a2/bu \u2014 down 0.75% today, up 9% MTD.",
        "Soybeans (Nov futures): 1,142\u00a2/bu \u2014 up 1.2% on the week.",
        "Chicago SRW Wheat (Jul futures): 598\u00a2/bu \u2014 up 3.5% on Black Sea supply concerns.",
+       "Eastern Corn Belt corn basis: +12\u00a2 to +18\u00a2 over Dec futures \u2014 strong ethanol plant competition.",
       ],
      },
      {
       heading: "Key Drivers & Risks",
       items: [
-       "USDA May WASDE report expected to tighten corn ending stocks on reduced planted-area estimates.",
-       "Strong ethanol margins supporting corn basis in the eastern Corn Belt.",
-       "China\u2019s soybean import pace running 8% below year-ago levels \u2014 a demand headwind.",
-       "Russian wheat export quotas and Black Sea shipping disruptions tightening global supply.",
+       "USDA May WASDE expected to tighten corn ending stocks on reduced planted-area estimates from wet spring.",
+       "Ethanol margins running $0.28\u2013$0.34/gal \u2014 supporting aggressive corn basis bids from Iowa and Illinois plants.",
+       "China\u2019s soybean import pace running 8% below year-ago levels \u2014 a demand headwind for Nov futures.",
+       "USDA planting pace at 18% complete vs. 34% 5-year average; every week of delay past May 10 costs ~1 bu/acre.",
       ],
      },
      {
       heading: "Actionable Insights",
       items: [
-       "Producers with unpriced 2025 corn should evaluate scale-up selling between 470\u2013490\u00a2/bu.",
-       "Watch the weekly EIA ethanol production report for demand signals.",
-       "Soybean basis in the Gulf is historically strong \u2014 consider basis contracts before harvest pressure.",
+       "Producers with unpriced 2025 corn should evaluate scale-up selling between 470\u2013490\u00a2/bu on weather rallies.",
+       "Watch the weekly EIA ethanol production report (Wednesdays) for demand signals that move corn basis.",
+       "Soybean Gulf basis is historically strong \u2014 consider basis contracts before harvest pressure arrives in October.",
       ],
      },
     ],
    },
-
-   dairy: {
-    title: "Dairy (Milk Classes)",
-    badge: { text: "Prices rising", color: "bg-green-100 text-green-800" },
-    summary: "Class III milk prices have recovered to $14.94/cwt for February 2026 after a prolonged trough. Cheese demand and tightening milk supplies are the primary drivers, though elevated feed costs continue to compress margins.",
+   "northern-plains": {
+    label: "Northern Plains (ND, SD, MN)",
+    badge: { text: "Cool-weather pressure", color: "bg-blue-100 text-blue-800" },
+    summary: "Spring wheat planting is running 16 days behind the 5-year average due to cool soils and late snowpack melt. Short growing season dynamics mean compressed planting windows have outsized yield implications for hard red spring wheat.",
+    crops: "Spring Wheat, Corn, Soybeans, Canola, Sunflowers",
     sections: [
      {
       heading: "Price Snapshot",
       items: [
-       "Class II (fluid/cream): $17.82/cwt \u2014 stable, supported by strong domestic fluid demand.",
-       "Class III (cheese): $14.94/cwt \u2014 up $1.20/cwt from the prior month.",
-       "Class IV (butter/powder): $16.45/cwt \u2014 butter prices near multi-year highs at $2.85/lb.",
+       "Spring Wheat (Sep futures, MGEX): 618\u00a2/bu \u2014 up 4.2% on tight global hard wheat supply.",
+       "Corn (Dec futures): 466.25\u00a2/bu \u2014 basis at -22\u00a2 to -30\u00a2 in ND/SD vs. Dec; longer haul to ethanol plants.",
+       "Soybeans (Nov futures): 1,142\u00a2/bu \u2014 basis -35\u00a2 to -45\u00a2; crush capacity limited in the region.",
+       "Canola (ICE Nov): C$640/MT \u2014 supported by tight Canadian carryout and biodiesel demand.",
       ],
      },
      {
       heading: "Key Drivers & Risks",
       items: [
-       "U.S. cheese stocks below 5-year average, supporting Class III prices.",
-       "Butter exports to Southeast Asia accelerating, tightening domestic supply.",
-       "Corn and soybean meal feed costs remain elevated, squeezing producer margins despite higher milk prices.",
-       "Herd liquidation in 2023\u201324 has reduced national milk cow numbers by ~1.5%.",
+       "Spring wheat planting at 22% complete vs. 38% 5-year average; soil temps averaging 42\u201346\u00b0F in northern ND.",
+       "Short growing season means late-planted spring wheat faces elevated frost risk at grain fill in September.",
+       "Canola and sunflower acres may shift to spring wheat if planting window narrows further past late May.",
+       "Global hard red spring wheat stocks tight \u2014 any U.S. production shortfall could push MGEX futures sharply higher.",
       ],
      },
      {
       heading: "Actionable Insights",
       items: [
-       "Dairy producers should evaluate Class III futures hedges in the $15.50\u2013$16.00/cwt range for Q3 2026.",
-       "Monitor CME spot cheese and butter prices daily \u2014 they are the leading indicator for Class III/IV settlements.",
-       "Feed cost management (locking in corn/soybean meal) is as important as milk price hedging right now.",
+       "Prioritize spring wheat acres first \u2014 it tolerates cooler soils better than corn and captures the tight global supply premium.",
+       "Delay corn planting until soil temps reach 50\u00b0F consistently; cold-soil germination risks outweigh early-planting benefits.",
+       "Consider forward-contracting 20\u201330% of spring wheat at current MGEX prices \u2014 upside is limited if planting catches up.",
       ],
      },
     ],
    },
+   "southern-plains": {
+    label: "Southern Plains (KS, OK, TX)",
+    badge: { text: "Drought stress", color: "bg-red-100 text-red-800" },
+    summary: "Winter wheat is under significant drought stress heading into the critical grain-fill period, with crop ratings at 38% good/excellent. Basis levels are weakening as elevator storage fills and export demand from the Gulf remains soft.",
+    crops: "Winter Wheat, Grain Sorghum, Cotton",
+    sections: [
+     {
+      heading: "Price Snapshot",
+      items: [
+       "Kansas City HRW Wheat (Jul futures): 612\u00a2/bu \u2014 up 2.8% on domestic drought concerns.",
+       "HRW wheat basis (Wichita): -45\u00a2 to -55\u00a2 under Jul futures \u2014 weak on soft export demand.",
+       "Grain sorghum (milo): ~$4.85/bu at Texas Gulf \u2014 trading at a discount to corn on limited export demand.",
+       "Cotton (Dec futures): 78.40\u00a2/lb \u2014 down 3% on weak export sales and strong Brazilian competition.",
+      ],
+     },
+     {
+      heading: "Key Drivers & Risks",
+      items: [
+       "D2\u2013D3 drought covering 55% of Kansas and Oklahoma; soil moisture at 60\u201375% of normal.",
+       "Drought stress during grain fill can reduce winter wheat yields 15\u201330% \u2014 abandonment risk rising in western Kansas.",
+       "HRW wheat basis weakness reflects soft Gulf export demand as Black Sea wheat remains price-competitive.",
+       "Cotton acreage may be reduced if drought persists; dryland cotton in the Texas Panhandle most at risk.",
+      ],
+     },
+     {
+      heading: "Actionable Insights",
+      items: [
+       "Scout winter wheat fields for head scab and aphid pressure \u2014 drought-stressed crops are more vulnerable to secondary damage.",
+       "Document APH yield records now if abandonment becomes necessary for crop insurance purposes.",
+       "Consider forward-contracting grain sorghum for fall delivery if local elevator bids firm on ethanol or export demand.",
+      ],
+     },
+    ],
+   },
+   "pacific-northwest": {
+    label: "Pacific Northwest (WA, OR)",
+    badge: { text: "Export demand firm", color: "bg-green-100 text-green-800" },
+    summary: "Soft white wheat export demand from Asian buyers is running ahead of last year, supporting PNW basis levels. Cool, wet conditions are favorable for yield potential but elevate stripe rust risk heading into the critical growth stages.",
+    crops: "Soft White Wheat, Barley, Potatoes, Hops",
+    sections: [
+     {
+      heading: "Price Snapshot",
+      items: [
+       "Soft White Wheat (Portland export basis): +85\u00a2 to +95\u00a2 over CBOT Jul futures \u2014 strong Asian demand premium.",
+       "CBOT SRW Wheat (Jul futures): 598\u00a2/bu \u2014 PNW soft white effectively trading near 685\u00a2/bu delivered Portland.",
+       "Barley (malting, PNW): ~$6.20/bu \u2014 supported by craft brewing demand and limited carryout.",
+       "Feed barley: ~$5.40/bu \u2014 competitive with corn on energy basis for Pacific Rim feedlot buyers.",
+      ],
+     },
+     {
+      heading: "Key Drivers & Risks",
+      items: [
+       "Japanese and South Korean flour millers actively booking PNW soft white wheat \u2014 export sales running 12% above year-ago.",
+       "Cool, wet spring conditions highly favorable for stripe rust development; fungicide timing is critical.",
+       "Above-normal Cascade snowpack (118% of normal) ensures adequate irrigation water for Columbia Basin crops.",
+       "Strong basis levels may compress if Australian soft wheat competes more aggressively in Asian markets by Q3.",
+      ],
+     },
+     {
+      heading: "Actionable Insights",
+      items: [
+       "Secure export contracts early \u2014 Asian demand for soft white wheat is running ahead of last year and basis could soften at harvest.",
+       "Apply fungicide at flag-leaf stage (Feekes 8\u20139) to protect against stripe rust; cool wet conditions make this non-negotiable.",
+       "Delay spring nitrogen top-dress applications until soils dry to avoid compaction and maximize uptake efficiency.",
+      ],
+     },
+    ],
+   },
+   "california": {
+    label: "California",
+    badge: { text: "Water-constrained", color: "bg-orange-100 text-orange-800" },
+    summary: "Water availability is the dominant variable for California grain and specialty crop producers. Reduced Central Valley Project allocations are forcing some rice and cotton acres to fallow, while irrigation costs are rising for remaining planted acres.",
+    crops: "Rice, Cotton, Alfalfa, Almonds, Pistachios",
+    sections: [
+     {
+      heading: "Price Snapshot",
+      items: [
+       "California medium-grain rice: ~$18.50/cwt \u2014 supported by tight domestic stocks and strong Japan/Korea export demand.",
+       "Alfalfa (Supreme, San Joaquin Valley): ~$285/ton \u2014 elevated on reduced acreage from water constraints.",
+       "Cotton (Dec futures): 78.40\u00a2/lb \u2014 California Pima cotton commands a 15\u201320\u00a2/lb premium for quality.",
+       "Water (Westlands WD spot): ~$850\u2013$1,100/acre-foot \u2014 up sharply on reduced CVP allocations.",
+      ],
+     },
+     {
+      heading: "Key Drivers & Risks",
+      items: [
+       "Central Valley Project allocations reduced to 75% of contract for some districts; State Water Project at 65%.",
+       "Rice acreage in the Sacramento Valley projected down 15\u201320% as growers fallow fields rather than pay spot water prices.",
+       "Alfalfa acreage declining as dairy and beef producers compete with export demand for limited water-intensive hay.",
+       "SGMA groundwater pumping restrictions limiting fallback options for growers without surface water allocations.",
+      ],
+     },
+     {
+      heading: "Actionable Insights",
+      items: [
+       "Rice growers should confirm water delivery schedules with their district before finalizing planted acres \u2014 late cancellations carry contract penalties.",
+       "Audit irrigation system efficiency now; drip and micro-irrigation upgrades qualify for NRCS EQIP cost-share at 50\u201375%.",
+       "Alfalfa producers with secure water should consider expanding acreage \u2014 tight supply and export demand support strong prices.",
+      ],
+     },
+    ],
+   },
+   "delta": {
+    label: "Delta (AR, MS, LA)",
+    badge: { text: "Flooding delays", color: "bg-red-100 text-red-800" },
+    summary: "Excessive rainfall and Mississippi River flooding are pushing rice and soybean planting significantly behind pace. Basis levels are weakening at Delta elevators as storage fills with old-crop grain and new-crop planting delays create uncertainty.",
+    crops: "Rice, Soybeans, Corn, Cotton",
+    sections: [
+     {
+      heading: "Price Snapshot",
+      items: [
+       "Long-grain rice (Arkansas, rough): ~$14.20/cwt \u2014 steady; domestic food demand stable.",
+       "Soybeans (Nov futures): 1,142\u00a2/bu \u2014 Delta basis at -55\u00a2 to -65\u00a2; weak on storage congestion.",
+       "Corn (Dec futures): 466.25\u00a2/bu \u2014 Delta basis at -30\u00a2 to -40\u00a2; limited local ethanol demand.",
+       "Cotton (Dec futures): 78.40\u00a2/lb \u2014 Delta basis near flat; Memphis area merchants active.",
+      ],
+     },
+     {
+      heading: "Key Drivers & Risks",
+      items: [
+       "Rice planting at 12% complete vs. 28% 5-year average; soybeans at 8% vs. 20% \u2014 flooding the primary cause.",
+       "Mississippi River at or above flood stage at Memphis and Vicksburg; additional 2\u20133 inches forecast this week.",
+       "Delayed rice planting past June 1 shifts variety selection toward shorter-season types with lower yield ceilings.",
+       "Soybean basis weakness reflects old-crop storage congestion; basis should firm once new-crop planting confirms acreage.",
+      ],
+     },
+     {
+      heading: "Actionable Insights",
+      items: [
+       "Assess field drainage infrastructure now \u2014 pump capacity and outlet tile condition are critical for capturing any dry windows.",
+       "Consider prevented-planting claims if fields remain flooded past the final planting date for rice (typically June 10\u201315 in AR).",
+       "Scout emerged soybean fields for Phytophthora root rot \u2014 saturated soils dramatically increase infection risk in early stands.",
+      ],
+     },
+    ],
+   },
+  };
 
-   cattle: {
-    title: "Cattle",
+  // ── Dairy: region-specific data ─────────────────────────────────────────────
+  const DAIRY_REGIONS = {
+   "wisconsin": {
+    label: "Wisconsin",
+    badge: { text: "Cheese market firm", color: "bg-green-100 text-green-800" },
+    summary: "Wisconsin\u2019s cheese-focused dairy sector is benefiting from Class III prices recovering to $14.94/cwt. Feed costs from Corn Belt corn and soybean meal remain the primary margin pressure, but strong cheese demand is providing a partial offset.",
+    crops: "Corn Silage, Alfalfa, Corn, Soybeans (feed)",
+    sections: [
+     {
+      heading: "Price Snapshot",
+      items: [
+       "Class III (cheese): $14.94/cwt \u2014 up $1.20/cwt from prior month; cheese vats running near capacity.",
+       "Class IV (butter/powder): $16.45/cwt \u2014 butter at $2.85/lb near multi-year highs.",
+       "Corn (local basis, WI): 466\u00a2/bu + 8\u00a2 basis \u2014 feed cost ~$7.50/cwt milk equivalent.",
+       "Soybean meal (Decatur, IL): ~$385/ton \u2014 elevated, adding $1.20\u2013$1.50/cwt to feed costs.",
+      ],
+     },
+     {
+      heading: "Key Drivers & Risks",
+      items: [
+       "U.S. cheese stocks below 5-year average \u2014 primary driver of Class III recovery; cheddar at $1.72/lb on CME spot.",
+       "Wisconsin milk cow numbers down 1.8% year-over-year \u2014 tighter supply supporting milk prices.",
+       "Corn and soybean meal feed costs remain elevated, compressing margins despite higher Class III prices.",
+       "Wet spring delaying first-cutting alfalfa harvest; quality may be reduced if rain continues through June.",
+      ],
+     },
+     {
+      heading: "Actionable Insights",
+      items: [
+       "Evaluate Class III futures hedges in the $15.50\u2013$16.00/cwt range for Q3 2026 \u2014 current rally may be near-term peak.",
+       "Lock in corn and soybean meal purchases for Q3 now; feed costs are as important as milk price hedging.",
+       "Monitor CME spot cheddar cheese daily \u2014 it is the leading indicator for Class III monthly settlements.",
+      ],
+     },
+    ],
+   },
+   "california": {
+    label: "California",
+    badge: { text: "Water & cost pressure", color: "bg-orange-100 text-orange-800" },
+    summary: "California dairy producers face a dual squeeze: water availability is driving up irrigation costs for on-farm feed production, while the state\u2019s export-oriented market means Class IV butter and powder prices are the primary revenue driver.",
+    crops: "Alfalfa, Corn Silage, Cotton (co-located), Almonds/Pistachios (co-located)",
+    sections: [
+     {
+      heading: "Price Snapshot",
+      items: [
+       "Class IV (butter/powder): $16.45/cwt \u2014 California\u2019s dominant milk class; butter at $2.85/lb.",
+       "Class II (fluid/cream): $17.82/cwt \u2014 fluid milk demand strong in Southern California metro markets.",
+       "Alfalfa (Supreme, San Joaquin): ~$285/ton \u2014 up 18% year-over-year on water-constrained acreage.",
+       "Water cost (spot, CVP district): ~$850\u2013$1,100/acre-foot \u2014 adding $0.80\u2013$1.20/cwt to feed production costs.",
+      ],
+     },
+     {
+      heading: "Key Drivers & Risks",
+      items: [
+       "CVP water allocations at 75% of contract; some dairies sourcing alfalfa from Arizona and Idaho at premium freight costs.",
+       "California\u2019s large herd size (1.7M cows) and export orientation make it highly sensitive to global butter/powder prices.",
+       "Almond and pistachio operations competing for the same water and land, driving up lease rates in the San Joaquin Valley.",
+       "SGMA groundwater restrictions limiting pumping fallback options for dairies in critically overdrafted basins.",
+      ],
+     },
+     {
+      heading: "Actionable Insights",
+      items: [
+       "Source alfalfa contracts from Idaho or Arizona now \u2014 California spot prices will likely rise further as summer heat reduces yields.",
+       "Evaluate Class IV futures hedges for Q3\u2013Q4 2026; butter export demand to Southeast Asia is supporting current prices.",
+       "Audit water use efficiency on irrigated feed acres; NRCS EQIP cost-share covers up to 75% of drip conversion costs.",
+      ],
+     },
+    ],
+   },
+   "idaho": {
+    label: "Idaho",
+    badge: { text: "Growing region", color: "bg-green-100 text-green-800" },
+    summary: "Idaho is one of the fastest-growing dairy states, with strong milk quality metrics and competitive feed costs from local corn and hay production. Export opportunities through Pacific Northwest ports are a key advantage over Midwest competitors.",
+    crops: "Alfalfa, Corn Silage, Barley, Potatoes (co-located)",
+    sections: [
+     {
+      heading: "Price Snapshot",
+      items: [
+       "Class III (cheese): $14.94/cwt \u2014 Idaho processors primarily cheese-focused; strong Pacific Rim export demand.",
+       "Class IV (butter/powder): $16.45/cwt \u2014 powder exports through Portland and Seattle ports competitive.",
+       "Alfalfa (Supreme, Twin Falls): ~$235/ton \u2014 15\u201320% below California prices; a key competitive advantage.",
+       "Corn silage (local): ~$48\u201352/ton \u2014 competitive with Midwest on delivered basis given lower freight costs.",
+      ],
+     },
+     {
+      heading: "Key Drivers & Risks",
+      items: [
+       "Snake River Plain irrigation water supply secure at 95% of normal \u2014 a key advantage over California competitors.",
+       "Idaho milk quality (SCC, bacteria counts) among the best nationally \u2014 supports premium cheese and powder pricing.",
+       "Herd expansion continuing; new dairy construction adding ~80,000 cows over the past 3 years.",
+       "Feed cost advantage over California narrowing as Idaho alfalfa acreage tightens with competing potato and grain demand.",
+      ],
+     },
+     {
+      heading: "Actionable Insights",
+      items: [
+       "Lock in alfalfa contracts for summer and fall delivery now \u2014 Idaho hay prices typically firm 10\u201315% by August.",
+       "Explore direct export contracts for cheese and powder through Pacific Northwest ports \u2014 freight advantage over Midwest is significant.",
+       "Monitor Snake River water allocations weekly; any reduction would immediately impact on-farm feed production costs.",
+      ],
+     },
+    ],
+   },
+   "new-york": {
+    label: "New York / Northeast",
+    badge: { text: "Fluid milk focus", color: "bg-blue-100 text-blue-800" },
+    summary: "Northeast dairy producers are primarily oriented toward fluid milk and Class II products, serving the dense urban markets of New York City, Boston, and Philadelphia. Regional feed costs are higher than the Midwest, but fluid milk premiums partially offset the disadvantage.",
+    crops: "Corn Silage, Alfalfa, Hay, Corn, Soybeans (feed)",
+    sections: [
+     {
+      heading: "Price Snapshot",
+      items: [
+       "Class II (fluid/cream): $17.82/cwt \u2014 primary revenue class for Northeast producers; stable on strong urban demand.",
+       "Class III (cheese): $14.94/cwt \u2014 secondary class; some NY processors making artisan and specialty cheeses.",
+       "Corn (local basis, NY/PA): 466\u00a2/bu + 25\u00a2 to +35\u00a2 basis \u2014 higher freight from Midwest adds $0.60\u2013$0.80/cwt feed cost.",
+       "Hay (mixed grass/legume, NY): ~$195\u2013$220/ton \u2014 elevated on wet spring limiting first-cut quality.",
+      ],
+     },
+     {
+      heading: "Key Drivers & Risks",
+      items: [
+       "Dense urban population within 300 miles provides stable fluid milk demand \u2014 Class II prices less volatile than Class III.",
+       "Regional feed costs 15\u201320% above Midwest average due to freight; corn basis at +25\u00a2 to +35\u00a2 over Chicago.",
+       "Wet spring delaying first-cut hay harvest; quality concerns if rain continues \u2014 may force more purchased feed.",
+       "Farm consolidation accelerating as smaller operations struggle with high land costs and labor availability.",
+      ],
+     },
+     {
+      heading: "Actionable Insights",
+      items: [
+       "Secure corn and soybean meal contracts for Q3 now \u2014 Northeast basis typically widens further in summer as local demand peaks.",
+       "Evaluate Class II futures hedges for Q3\u2013Q4 2026; fluid milk demand in Northeast metros is seasonally strong in fall.",
+       "First-cut hay quality will be critical this year \u2014 test forage quality before feeding and adjust rations to avoid milk production losses.",
+      ],
+     },
+    ],
+   },
+   "texas": {
+    label: "Texas",
+    badge: { text: "Heat stress risk", color: "bg-red-100 text-red-800" },
+    summary: "Texas dairy operations face intensifying heat stress challenges as summer temperatures regularly exceed 100\u00b0F, reducing milk production and reproductive efficiency. Water availability and feed costs are additional pressure points in this rapidly growing region.",
+    crops: "Corn Silage, Alfalfa (imported), Cottonseed, Grain Sorghum",
+    sections: [
+     {
+      heading: "Price Snapshot",
+      items: [
+       "Class III (cheese): $14.94/cwt \u2014 Texas processors primarily cheese and powder focused.",
+       "Class IV (butter/powder): $16.45/cwt \u2014 growing export orientation through Gulf ports.",
+       "Alfalfa (imported, AZ/NM): ~$260\u2013$280/ton delivered \u2014 Texas grows limited hay; most is imported.",
+       "Cottonseed (local): ~$285/ton \u2014 a key energy and protein source unique to Texas dairies; competitive with soybean meal.",
+      ],
+     },
+     {
+      heading: "Key Drivers & Risks",
+      items: [
+       "Summer temperatures regularly exceeding 100\u00b0F reduce milk production 10\u201318% and conception rates by 20\u201330%.",
+       "Ogallala Aquifer depletion accelerating in the Texas Panhandle \u2014 long-term water availability is the existential risk.",
+       "Drought conditions limiting local forage production; most feed must be imported from New Mexico, Arizona, or the Midwest.",
+       "Herd expansion continuing despite challenges; Texas now ranks 5th nationally with ~700,000 milk cows.",
+      ],
+     },
+     {
+      heading: "Actionable Insights",
+      items: [
+       "Invest in heat abatement infrastructure (shade, fans, soakers) before June \u2014 ROI on heat stress reduction is $80\u2013$120/cow/year.",
+       "Secure alfalfa and cottonseed contracts for summer delivery now \u2014 Texas feed supply is tight and spot prices spike in July\u2013August.",
+       "Monitor Ogallala well levels and consider water-use efficiency audits; NRCS EQIP funding available for irrigation improvements.",
+      ],
+     },
+    ],
+   },
+  };
+
+  // ── Cattle: region-specific data ────────────────────────────────────────────
+  const CATTLE_REGIONS = {
+   "texas-nebraska": {
+    label: "Texas / Nebraska (Feedlot Country)",
     badge: { text: "Supply constrained", color: "bg-red-100 text-red-800" },
-    summary: "Live cattle futures are at historic highs near 238.525\u00a2/lb as the U.S. beef cow herd sits at its smallest level since 1951. Nebraska wildfires have further tightened near-term feeder cattle availability.",
+    summary: "Feedlot country is operating at historically tight cattle-on-feed numbers as the national beef cow herd sits at its smallest level since 1951. Feeder cattle prices are at record highs, and corn-based feed costs are compressing feedlot margins despite strong live cattle prices.",
+    crops: "Feeder Cattle, Corn/Hay (feed inputs)",
     sections: [
      {
       heading: "Price Snapshot",
       items: [
-       "Live Cattle (Jun futures): 238.525\u00a2/lb \u2014 near all-time highs.",
-       "Feeder Cattle (Aug futures): 268.10\u00a2/lb \u2014 up 4% on the month.",
-       "Choice boxed beef cutout: $318.45/cwt \u2014 strong retail and foodservice demand.",
+       "Live Cattle (Jun futures): 238.525\u00a2/lb \u2014 near all-time highs; cash trade at $240\u2013$242/cwt in the Southern Plains.",
+       "Feeder Cattle (Aug futures): 268.10\u00a2/lb \u2014 up 4% on the month; 750-lb steers at $290\u2013$300/cwt in TX/NE.",
+       "Choice boxed beef cutout: $318.45/cwt \u2014 strong retail and foodservice demand supporting packer margins.",
+       "Corn (feedlot cost of gain): ~$1.05\u2013$1.12/lb of gain at current corn prices \u2014 historically high.",
       ],
      },
      {
       heading: "Key Drivers & Risks",
       items: [
-       "U.S. beef cow herd at 28.2 million head \u2014 lowest since 1951 per USDA January inventory.",
+       "U.S. beef cow herd at 28.2 million head \u2014 lowest since 1951; feeder cattle supply will remain tight through 2026.",
        "Nebraska and Kansas wildfires destroyed an estimated 30,000\u201350,000 head and significant pasture acreage.",
-       "Drought in the southern Plains limiting grass-based stocker programs and delaying herd rebuilding.",
-       "Strong consumer demand for beef despite record retail prices \u2014 demand destruction risk if prices rise further.",
+       "Feedlot cost of gain at $1.05\u2013$1.12/lb is compressing margins even at record live cattle prices.",
+       "Slaughter pace running 6\u20138% below year-ago \u2014 confirms tight supply, not demand destruction.",
       ],
      },
      {
       heading: "Actionable Insights",
       items: [
-       "Cattle feeders should lock in feeder cattle purchases now \u2014 prices are unlikely to soften materially before fall.",
-       "Cow-calf operators in drought areas should evaluate early weaning and culling strategies to preserve forage.",
-       "Packers and retailers should monitor weekly slaughter numbers \u2014 any uptick signals herd liquidation, not rebuilding.",
+       "Lock in feeder cattle purchases now \u2014 prices are unlikely to soften materially before fall given structural supply tightness.",
+       "Hedge corn purchases for Q3\u2013Q4 to protect cost of gain; feedlot margins are thin and corn is the largest variable cost.",
+       "Monitor weekly USDA cattle-on-feed reports \u2014 placements below year-ago confirm the supply tightness narrative.",
       ],
      },
     ],
    },
+   "montana-wyoming": {
+    label: "Montana / Wyoming (Ranching)",
+    badge: { text: "Pasture conditions key", color: "bg-amber-100 text-amber-800" },
+    summary: "Northern Plains ranchers are navigating a complex environment: record feeder cattle prices are creating strong incentive to sell, but rebuilding the national herd requires holding back heifers. Pasture conditions and drought outlook will drive the critical retain-vs.-sell decision this summer.",
+    crops: "Cow-Calf Pairs, Stocker Cattle, Grass-Fed Beef",
+    sections: [
+     {
+      heading: "Price Snapshot",
+      items: [
+       "Feeder Cattle (Aug futures): 268.10\u00a2/lb \u2014 500-lb calves bringing $320\u2013$340/cwt at Montana sale barns.",
+       "Cull cows: $115\u2013$125/cwt \u2014 elevated on tight cow supply; strong incentive to hold productive cows.",
+       "Grass-fed beef premium (direct market): $4.50\u2013$6.00/lb hanging weight \u2014 strong consumer demand.",
+       "Hay (native grass, MT/WY): ~$145\u2013$175/ton \u2014 adequate supply after above-normal 2024 hay crop.",
+      ],
+     },
+     {
+      heading: "Key Drivers & Risks",
+      items: [
+       "Pasture conditions in MT/WY at 58% good/excellent \u2014 above the Southern Plains but below the 5-year average.",
+       "Record feeder calf prices create strong sell incentive, but national herd rebuilding requires retaining replacement heifers.",
+       "Drought risk building in eastern Montana and Wyoming; NOAA 90-day outlook shows elevated drought probability.",
+       "Grass-fed and direct-market beef demand growing 12\u201315% annually \u2014 premium over commodity beef widening.",
+      ],
+     },
+     {
+      heading: "Actionable Insights",
+      items: [
+       "Evaluate heifer retention decisions carefully \u2014 the long-term value of rebuilding the herd may exceed the short-term premium on feeder sales.",
+       "Develop a drought contingency plan now: identify early destocking thresholds before pastures are damaged.",
+       "Explore direct-market and grass-fed certification programs \u2014 the premium over commodity prices is at a multi-year high.",
+      ],
+     },
+    ],
+   },
+   "wisconsin-minnesota": {
+    label: "Wisconsin / Minnesota (Dairy Region)",
+    badge: { text: "Dairy cull dynamics", color: "bg-blue-100 text-blue-800" },
+    summary: "Dairy cow culling rates in Wisconsin and Minnesota are a key driver of beef supply in this region. Rising milk prices are reducing the incentive to cull, tightening beef cow supply and supporting cull cow prices. Dairy-beef crossbred programs are growing rapidly.",
+    crops: "Dairy Cows (cull), Dairy-Beef Crossbreds, Corn/Hay (feed)",
+    sections: [
+     {
+      heading: "Price Snapshot",
+      items: [
+       "Cull dairy cows (Holstein, WI): $105\u2013$118/cwt \u2014 elevated on tight beef supply and strong processing demand.",
+       "Dairy-beef crossbred feeders (Angus x Holstein): $185\u2013$210/cwt \u2014 growing premium over straight Holstein.",
+       "Live Cattle (Jun futures): 238.525\u00a2/lb \u2014 supports strong cull cow and crossbred pricing.",
+       "Corn (WI basis): 466\u00a2/bu + 8\u00a2 \u2014 feed cost for backgrounding crossbreds at ~$1.00\u2013$1.05/lb of gain.",
+      ],
+     },
+     {
+      heading: "Key Drivers & Risks",
+      items: [
+       "Class III milk price recovery to $14.94/cwt is reducing dairy cow culling rates \u2014 tightening beef supply from this region.",
+       "Dairy-beef crossbred programs (Angus, Simmental sires on Holstein cows) producing calves worth $300\u2013$400 more than straight Holstein.",
+       "Wisconsin milk cow numbers down 1.8% year-over-year \u2014 fewer cows means fewer cull animals entering the beef supply.",
+       "Feed costs (corn + soybean meal) elevated, compressing margins for backgrounding operations.",
+      ],
+     },
+     {
+      heading: "Actionable Insights",
+      items: [
+       "Dairy producers should evaluate dairy-beef crossbreeding programs \u2014 beef semen on non-replacement matings adds $300\u2013$400/calf.",
+       "Backgrounding operators should lock in corn and hay costs now for Q3 \u2014 feed is the largest variable cost in this region.",
+       "Monitor Class III milk prices weekly \u2014 any price decline below $14.00/cwt will accelerate culling and increase beef supply.",
+      ],
+     },
+    ],
+   },
+   "southern-plains": {
+    label: "Southern Plains (Cow-Calf Country)",
+    badge: { text: "Drought stress critical", color: "bg-red-100 text-red-800" },
+    summary: "Cow-calf operators in Kansas, Oklahoma, and Texas are facing the most difficult operating environment in a decade. Drought is stressing pastures, forcing early weaning and herd liquidation decisions at the same time feeder calf prices are at record highs \u2014 creating a painful but potentially profitable forced-sell situation.",
+    crops: "Cow-Calf Pairs, Stocker Cattle, Winter Wheat Pasture",
+    sections: [
+     {
+      heading: "Price Snapshot",
+      items: [
+       "Feeder Cattle (Aug futures): 268.10\u00a2/lb \u2014 500-lb calves at $310\u2013$325/cwt in Oklahoma City.",
+       "Cull cows: $110\u2013$120/cwt \u2014 strong demand from packers; liquidation selling adding to supply.",
+       "Stocker cattle (600-lb steers): $255\u2013$270/cwt \u2014 limited availability as drought reduces grass-based programs.",
+       "Winter wheat pasture: severely limited by drought; many operators pulled cattle off wheat pasture 4\u20136 weeks early.",
+      ],
+     },
+     {
+      heading: "Key Drivers & Risks",
+      items: [
+       "D2\u2013D3 drought covering 55% of Kansas and Oklahoma; pasture and range rated 28% good/excellent.",
+       "Early weaning (at 90\u2013120 days vs. normal 180\u2013205 days) reduces forage demand but requires creep feed investment.",
+       "Herd liquidation selling is adding near-term beef supply but will tighten feeder cattle availability in 2026\u20132027.",
+       "Drought-stressed cattle have higher health risks; BRD incidence elevated in early-weaned and stressed calves.",
+      ],
+     },
+     {
+      heading: "Actionable Insights",
+      items: [
+       "Evaluate early weaning now if pasture conditions are deteriorating \u2014 preserving cow body condition is critical for next year\u2019s calf crop.",
+       "Document pasture damage and cattle losses for FSA Livestock Forage Disaster Program (LFP) and Emergency Livestock Assistance Program (ELAP) claims.",
+       "If liquidating cows, prioritize selling open and low-producing cows first \u2014 retain the best genetics for when conditions improve.",
+      ],
+     },
+    ],
+   },
+   "pacific-northwest": {
+    label: "Pacific Northwest",
+    badge: { text: "Grass-fed premium", color: "bg-green-100 text-green-800" },
+    summary: "Pacific Northwest cattle producers are well-positioned to capture the growing grass-fed and natural beef premium. Adequate pasture conditions and strong export demand through Pacific ports are key advantages, though the small regional feedlot sector faces high corn costs.",
+    crops: "Grass-Fed Beef, Stocker Cattle, Cow-Calf Pairs",
+    sections: [
+     {
+      heading: "Price Snapshot",
+      items: [
+       "Grass-fed beef (direct market, PNW): $5.00\u2013$6.50/lb hanging weight \u2014 strong Pacific Rim and domestic demand.",
+       "Feeder Cattle (Aug futures): 268.10\u00a2/lb \u2014 PNW stocker calves at $275\u2013$290/cwt; premium for natural/no-hormone.",
+       "Cull cows: $108\u2013$118/cwt \u2014 in line with national market; limited local packing capacity.",
+       "Hay (orchard grass, WA/OR): ~$195\u2013$225/ton \u2014 adequate supply after good 2024 hay crop.",
+      ],
+     },
+     {
+      heading: "Key Drivers & Risks",
+      items: [
+       "Pasture conditions in WA/OR at 62% good/excellent \u2014 above national average; adequate moisture from above-normal snowpack.",
+       "Grass-fed and natural beef export demand to Japan, South Korea, and Taiwan growing 15\u201320% annually.",
+       "Limited regional feedlot capacity means most feeder cattle are shipped to Nebraska or Texas \u2014 adding freight cost.",
+       "Stripe rust and wet conditions reducing wheat pasture quality in the Palouse; some operators supplementing with hay.",
+      ],
+     },
+     {
+      heading: "Actionable Insights",
+      items: [
+       "Pursue grass-fed or natural beef certification if not already certified \u2014 the premium over commodity prices is at a multi-year high.",
+       "Explore direct export contracts through Pacific Northwest ports for grass-fed beef \u2014 Asian buyers are actively seeking U.S. product.",
+       "Stocker operators should lock in feeder purchases now for summer grazing programs \u2014 PNW pasture conditions support strong gains.",
+      ],
+     },
+    ],
+   },
+  };
+
+  // ── All other modal content ─────────────────────────────────────────────────
+  const MODALS = {
 
    fuel: {
     title: "Fuel & Energy",
@@ -740,25 +1197,31 @@
     + buildSectionsHTML(data.sections);
   }
 
-  // Build the location-selector dropdown HTML
-  function buildRegionDropdown(selectedKey) {
-   var options = Object.keys(WEATHER_REGIONS).map(function(key) {
+  // Build a generic region dropdown for any modal type
+  function buildRegionDropdownFor(modalId, selectedKey, regionsObj) {
+   var selectId = modalId + "-region-select";
+   var options = Object.keys(regionsObj).map(function(key) {
     var selected = key === selectedKey ? ' selected' : '';
-    return '<option value="' + key + '"' + selected + '>' + WEATHER_REGIONS[key].label + '</option>';
+    return '<option value="' + key + '"' + selected + '>' + regionsObj[key].label + '</option>';
    }).join("");
    return '<div class="flex items-center gap-2">'
-    + '<label for="weather-region-select" class="text-xs font-semibold text-gray-500 uppercase tracking-wider whitespace-nowrap">Your region</label>'
-    + '<select id="weather-region-select" class="flex-1 text-sm border border-gray-200 rounded-lg px-2.5 py-1.5 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer">'
+    + '<label for="' + selectId + '" class="text-xs font-semibold text-gray-500 uppercase tracking-wider whitespace-nowrap">Your region</label>'
+    + '<select id="' + selectId + '" class="flex-1 text-sm border border-gray-200 rounded-lg px-2.5 py-1.5 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer">'
     + options
     + '</select>'
     + '</div>';
+  }
+
+  // Build the location-selector dropdown HTML (weather — kept for compatibility)
+  function buildRegionDropdown(selectedKey) {
+   return buildRegionDropdownFor("weather", selectedKey, WEATHER_REGIONS);
   }
 
   // Build weather modal HTML for a given region key
   function buildWeatherHTML(regionKey) {
    var r = WEATHER_REGIONS[regionKey];
    return '<div class="flex items-start justify-between gap-3 mb-1"><h3 id="modal-title" class="text-xl font-bold text-gray-900">Weather</h3><span class="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full ' + r.badge.color + '">' + r.badge.text + '</span></div>'
-    + buildRegionDropdown(regionKey)
+    + buildRegionDropdownFor("weather", regionKey, WEATHER_REGIONS)
     + '<p class="text-xs text-gray-400 -mt-1">Key crops: ' + r.crops + '</p>'
     + '<p class="text-sm text-gray-600 leading-relaxed">' + r.summary + '</p>'
     + '<div class="border-t border-gray-100"></div>'
@@ -776,10 +1239,82 @@
    }
   }
 
+  // Build grains modal HTML for a given region key
+  function buildGrainsHTML(regionKey) {
+   var r = GRAINS_REGIONS[regionKey];
+   return '<div class="flex items-start justify-between gap-3 mb-1"><h3 id="modal-title" class="text-xl font-bold text-gray-900">Grains</h3><span class="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full ' + r.badge.color + '">' + r.badge.text + '</span></div>'
+    + buildRegionDropdownFor("grains", regionKey, GRAINS_REGIONS)
+    + '<p class="text-xs text-gray-400 -mt-1">Key commodities: ' + r.crops + '</p>'
+    + '<p class="text-sm text-gray-600 leading-relaxed">' + r.summary + '</p>'
+    + '<div class="border-t border-gray-100"></div>'
+    + buildSectionsHTML(r.sections);
+  }
+
+  // Render grains modal content (used on open and on region change)
+  function renderGrainsRegion(regionKey) {
+   body.innerHTML = buildGrainsHTML(regionKey);
+   var select = document.getElementById("grains-region-select");
+   if (select) {
+    select.addEventListener("change", function() {
+     renderGrainsRegion(this.value);
+    });
+   }
+  }
+
+  // Build dairy modal HTML for a given region key
+  function buildDairyHTML(regionKey) {
+   var r = DAIRY_REGIONS[regionKey];
+   return '<div class="flex items-start justify-between gap-3 mb-1"><h3 id="modal-title" class="text-xl font-bold text-gray-900">Dairy (Milk Classes)</h3><span class="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full ' + r.badge.color + '">' + r.badge.text + '</span></div>'
+    + buildRegionDropdownFor("dairy", regionKey, DAIRY_REGIONS)
+    + '<p class="text-xs text-gray-400 -mt-1">Key commodities: ' + r.crops + '</p>'
+    + '<p class="text-sm text-gray-600 leading-relaxed">' + r.summary + '</p>'
+    + '<div class="border-t border-gray-100"></div>'
+    + buildSectionsHTML(r.sections);
+  }
+
+  // Render dairy modal content (used on open and on region change)
+  function renderDairyRegion(regionKey) {
+   body.innerHTML = buildDairyHTML(regionKey);
+   var select = document.getElementById("dairy-region-select");
+   if (select) {
+    select.addEventListener("change", function() {
+     renderDairyRegion(this.value);
+    });
+   }
+  }
+
+  // Build cattle modal HTML for a given region key
+  function buildCattleHTML(regionKey) {
+   var r = CATTLE_REGIONS[regionKey];
+   return '<div class="flex items-start justify-between gap-3 mb-1"><h3 id="modal-title" class="text-xl font-bold text-gray-900">Cattle</h3><span class="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full ' + r.badge.color + '">' + r.badge.text + '</span></div>'
+    + buildRegionDropdownFor("cattle", regionKey, CATTLE_REGIONS)
+    + '<p class="text-xs text-gray-400 -mt-1">Key commodities: ' + r.crops + '</p>'
+    + '<p class="text-sm text-gray-600 leading-relaxed">' + r.summary + '</p>'
+    + '<div class="border-t border-gray-100"></div>'
+    + buildSectionsHTML(r.sections);
+  }
+
+  // Render cattle modal content (used on open and on region change)
+  function renderCattleRegion(regionKey) {
+   body.innerHTML = buildCattleHTML(regionKey);
+   var select = document.getElementById("cattle-region-select");
+   if (select) {
+    select.addEventListener("change", function() {
+     renderCattleRegion(this.value);
+    });
+   }
+  }
+
   // Open modal
   function openModal(key) {
    if (key === "weather") {
     renderWeatherRegion("corn-belt");
+   } else if (key === "grains") {
+    renderGrainsRegion("corn-belt");
+   } else if (key === "dairy") {
+    renderDairyRegion("wisconsin");
+   } else if (key === "cattle") {
+    renderCattleRegion("texas-nebraska");
    } else {
     var data = MODALS[key];
     if (!data) return;
