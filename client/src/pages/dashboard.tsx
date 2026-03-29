@@ -4,12 +4,14 @@ import { apiRequest } from "@/lib/queryClient";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Link } from "wouter";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Cell,
 } from "recharts";
 import {
   LayoutDashboard, Archive, TrendingUp, Wheat, Beef, Milk, Fuel, Tractor, MapPin,
   RefreshCw, Calendar, ChevronUp, ChevronDown, Database, Menu, X, Sparkles, CheckCircle2,
+  Lock, User, Mail, ArrowRight,
 } from "lucide-react";
 
 // ── Types ──
@@ -291,20 +293,32 @@ function Sidebar({
         {/* Navigation */}
         <div className="px-3 mb-4">
           <p className="text-[10px] font-semibold text-[#555] uppercase tracking-wider px-2 mb-2">Navigation</p>
-          {NAV_SECTIONS.map(({ id, label, icon: Icon }) => (
-            <button
-              key={id}
-              onClick={() => { onNavigate(id === "dashboard" ? "top" : id); onClose(); }}
-              className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors mb-0.5 ${
-                id === "dashboard"
-                  ? "bg-[#1e1e1e] text-white border-l-2 border-[#D4A017]"
-                  : "text-[#888] hover:text-white hover:bg-[#1e1e1e]"
-              }`}
-              data-testid={`nav-${id}`}
-            >
-              <Icon className="w-4 h-4" />{label}
-            </button>
-          ))}
+          {/* Dashboard — scrolls to top */}
+          <button
+            onClick={() => { onNavigate("top"); onClose(); }}
+            className="w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors mb-0.5 bg-[#1e1e1e] text-white border-l-2 border-[#D4A017]"
+            data-testid="nav-dashboard"
+          >
+            <LayoutDashboard className="w-4 h-4" />Dashboard
+          </button>
+          {/* Archive — route */}
+          <Link
+            href="/archive"
+            onClick={() => onClose()}
+            className="w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors mb-0.5 text-[#888] hover:text-white hover:bg-[#1e1e1e]"
+            data-testid="nav-archive"
+          >
+            <Archive className="w-4 h-4" />Archive
+          </Link>
+          {/* Trends — route */}
+          <Link
+            href="/trends"
+            onClick={() => onClose()}
+            className="w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors mb-0.5 text-[#888] hover:text-white hover:bg-[#1e1e1e]"
+            data-testid="nav-trends"
+          >
+            <TrendingUp className="w-4 h-4" />Trends
+          </Link>
         </div>
 
         {/* Market Sections */}
@@ -438,6 +452,102 @@ function DashboardSkeleton() {
   );
 }
 
+// ── Registration Modal ──
+
+function RegistrationModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  if (!open) return null;
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (name && email) {
+      setSubmitted(true);
+      // In production, this would POST to an API
+      setTimeout(() => onClose(), 1500);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm" data-testid="registration-modal">
+      <div className="w-full max-w-md mx-4 rounded-xl bg-[#1a1a1a] border border-[#2a2a2a] p-8 shadow-2xl">
+        {/* Lock icon */}
+        <div className="flex justify-center mb-5">
+          <div className="w-14 h-14 rounded-full bg-[#222] border border-[#333] flex items-center justify-center">
+            <Lock className="w-6 h-6 text-[#D4A017]" />
+          </div>
+        </div>
+
+        <h3 className="text-xl font-bold text-white text-center mb-1">Access REALM PULSE DAILY</h3>
+        <p className="text-sm text-[#888] text-center mb-6">Free access — register once, stay informed daily.</p>
+
+        {/* Stats row */}
+        <div className="grid grid-cols-3 gap-3 mb-6">
+          {[
+            { stat: "Daily Briefings", detail: "6am EST" },
+            { stat: "21 Indicators", detail: "Live data" },
+            { stat: "Free Forever", detail: "No credit card" },
+          ].map((item, i) => (
+            <div key={i} className="text-center rounded-lg bg-[#141414] border border-[#222] py-3 px-2">
+              <p className="text-xs font-bold text-white">{item.stat}</p>
+              <p className="text-[10px] text-[#666] mt-0.5">{item.detail}</p>
+            </div>
+          ))}
+        </div>
+
+        {submitted ? (
+          <div className="text-center py-6">
+            <CheckCircle2 className="w-10 h-10 text-[#22c55e] mx-auto mb-3" />
+            <p className="text-sm text-white font-medium">Welcome aboard.</p>
+            <p className="text-xs text-[#888] mt-1">Redirecting to your dashboard...</p>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-3">
+            <div className="relative">
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#555]" />
+              <input
+                type="text"
+                placeholder="Your name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full bg-[#141414] border border-[#2a2a2a] rounded-lg py-2.5 pl-10 pr-4 text-sm text-white placeholder-[#555] focus:outline-none focus:border-[#D4A017]/50 transition-colors"
+                data-testid="input-name"
+              />
+            </div>
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#555]" />
+              <input
+                type="email"
+                placeholder="Email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full bg-[#141414] border border-[#2a2a2a] rounded-lg py-2.5 pl-10 pr-4 text-sm text-white placeholder-[#555] focus:outline-none focus:border-[#D4A017]/50 transition-colors"
+                data-testid="input-email"
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-[#D4A017] text-black font-semibold py-2.5 rounded-lg text-sm hover:bg-[#b8891a] transition-colors flex items-center justify-center gap-2"
+              data-testid="submit-register"
+            >
+              Get Free Access <ArrowRight className="w-4 h-4" />
+            </button>
+          </form>
+        )}
+
+        <p className="text-[10px] text-[#555] text-center mt-4 leading-relaxed">
+          By registering you agree to receive the daily REALM PULSE DAILY briefing. No spam, unsubscribe anytime.
+        </p>
+        <p className="text-[10px] text-[#666] text-center mt-2">
+          Already registered? If you see this on a new device, simply re-enter your details — you'll be recognised instantly.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 // ══════════════════════════════════════════
 // MAIN DASHBOARD
 // ══════════════════════════════════════════
@@ -445,6 +555,8 @@ function DashboardSkeleton() {
 export default function Dashboard() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("dashboard");
+  const [showRegistration, setShowRegistration] = useState(false);
+  const [isRegistered, setIsRegistered] = useState(false);
   const mainRef = useRef<HTMLDivElement>(null);
 
   const { data, isLoading, refetch, isFetching } = useQuery<MarketData>({
@@ -454,6 +566,18 @@ export default function Dashboard() {
       return (await res.json()) as MarketData;
     },
   });
+
+  // Scroll-triggered registration modal (show after ~600px scroll)
+  useEffect(() => {
+    if (isRegistered) return;
+    const handleScroll = () => {
+      if (window.scrollY > 600 && !showRegistration) {
+        setShowRegistration(true);
+      }
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isRegistered, showRegistration]);
 
   // Scroll to section
   const scrollTo = useCallback((id: string) => {
@@ -694,6 +818,12 @@ export default function Dashboard() {
       >
         ✦
       </button>
+
+      {/* ═══ REGISTRATION MODAL ═══ */}
+      <RegistrationModal
+        open={showRegistration && !isRegistered}
+        onClose={() => { setShowRegistration(false); setIsRegistered(true); }}
+      />
     </div>
   );
 }
