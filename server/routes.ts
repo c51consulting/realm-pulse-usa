@@ -273,5 +273,34 @@ export async function registerRoutes(
     }
   });
 
+    // POST /api/stripe/create-checkout - Create Stripe checkout session
+  app.post("/api/stripe/create-checkout", async (req, res) => {
+    try {
+      const Stripe = (await import("stripe")).default;
+      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
+        apiVersion: "2025-02-24.acacia" as any,
+      });
+      const { plan } = req.body;
+      const priceId = process.env.STRIPE_PRICE_ID;
+      if (!priceId) {
+        return res.status(500).json({ error: "Stripe not configured" });
+      }
+      const baseUrl = process.env.RAILWAY_PUBLIC_DOMAIN
+        ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`
+        : "http://localhost:3000";
+      const session = await stripe.checkout.sessions.create({
+        mode: "subscription",
+        line_items: [{ price: priceId, quantity: 1 }],
+        success_url: `${baseUrl}/?upgraded=true`,
+        cancel_url: `${baseUrl}/?upgrade=cancelled`,
+        metadata: { plan: plan || "monthly" },
+      });
+      return res.json({ url: session.url });
+    } catch (err: any) {
+      console.error("[stripe] Checkout error:", err.message);
+      return res.status(500).json({ error: "Failed to create checkout session" });
+    }
+  });
+
   return httpServer;
 }
