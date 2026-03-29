@@ -645,10 +645,10 @@ export default function Dashboard() {
             {/* ═══ HEADER ═══ */}
             <div className="flex items-start justify-between mb-8" data-testid="header">
               <div>
-                <h1 className="text-3xl sm:text-4xl font-bold text-white uppercase tracking-wider leading-none">
+                <h1 className="text-4xl font-bold text-white tracking-tight mb-1" style={{ fontFamily: "'Playfair Display', serif" }}>
                   REALM PULSE DAILY
                 </h1>
-                <p className="text-sm font-semibold text-[#D4A017] uppercase tracking-widest mt-2">
+                <p className="text-sm text-[#888] uppercase tracking-widest mt-2">
                   American Agricultural Market Intelligence
                 </p>
                 <div className="flex items-center gap-2 mt-3 text-sm text-[#888]">
@@ -669,10 +669,13 @@ export default function Dashboard() {
               </Button>
             </div>
 
-            {/* ═══ MARKET SNAPSHOT ═══ */}
+            {/* Gold divider */}
+              <div className="mt-6 mb-8 h-px bg-gradient-to-r from-[#D4A017]/60 via-[#D4A017]/20 to-transparent" />
+
+              {/* ═══ MARKET SNAPSHOT ═══ */}
             <section className="mb-12" id="section-snapshot">
               <SectionHeader title="Market Snapshot" subtitle="Key price indicators across all categories — latest edition" id="snapshot-header" />
-              <div className="rounded-lg border border-[#2a2a2a] bg-[#1a1a1a] p-5">
+                              <div className="overflow-x-auto rounded-xl border border-[#2a2a2a]">
                 <SnapshotTable indicators={data.snapshot} />
               </div>
             </section>
