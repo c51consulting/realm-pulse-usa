@@ -215,5 +215,63 @@ export async function registerRoutes(
     return res.json(data.todays_signal);
   });
 
+    // POST /api/ai/chat
+  app.post("/api/ai/chat", async (req, res) => {
+    const { message } = req.body;
+    if (!message) {
+      return res.status(400).json({ error: "Message is required" });
+    }
+    try {
+      // Build context from current market data
+      const data = cachedData || await buildMarketData();
+      const snapshotSummary = data.snapshot
+        .map((i) => `${i.name}: ${i.price} ${i.unit} (WoW: ${i.wow_pct}%, YoY: ${i.yoy_pct}%)`)
+        .join("; ");
+      const context = `You are REALM PULSE DAILY AI, a US agricultural market intelligence assistant. Today's key indicators: ${snapshotSummary}. Today's signal: ${data.todays_signal.text}`;
+      // Simple AI response using market context
+      const lowerMsg = message.toLowerCase();
+      let response = "";
+      if (lowerMsg.includes("summar") || lowerMsg.includes("overview") || lowerMsg.includes("today")) {
+        response = data.todays_signal.text;
+      } else if (lowerMsg.includes("grain") || lowerMsg.includes("corn") || lowerMsg.includes("wheat") || lowerMsg.includes("soy")) {
+        const grains = data.sections.grains?.indicators || [];
+        response = grains.length > 0
+          ? `Grain markets update: ${grains.map((g) => `${g.name} at ${g.price} ${g.unit} (WoW: ${g.wow_pct > 0 ? "+" : ""}${g.wow_pct}%)`).join(", ")}.`
+          : "Grain data is currently loading. Please try again shortly.";
+      } else if (lowerMsg.includes("cattle") || lowerMsg.includes("livestock") || lowerMsg.includes("hog")) {
+        const livestock = data.sections.livestock?.indicators || [];
+        response = livestock.length > 0
+          ? `Livestock markets update: ${livestock.map((l) => `${l.name} at ${l.price} ${l.unit} (WoW: ${l.wow_pct > 0 ? "+" : ""}${l.wow_pct}%)`).join(", ")}.`
+          : "Livestock data is currently loading. Please try again shortly.";
+      } else if (lowerMsg.includes("dairy") || lowerMsg.includes("milk") || lowerMsg.includes("cheese")) {
+        const dairy = data.sections.dairy?.indicators || [];
+        response = dairy.length > 0
+          ? `Dairy markets update: ${dairy.map((d) => `${d.name} at ${d.price} ${d.unit} (WoW: ${d.wow_pct > 0 ? "+" : ""}${d.wow_pct}%)`).join(", ")}.`
+          : "Dairy data is currently loading. Please try again shortly.";
+      } else if (lowerMsg.includes("energy") || lowerMsg.includes("oil") || lowerMsg.includes("diesel") || lowerMsg.includes("fertiliz")) {
+        const energy = data.sections.energy_inputs?.indicators || [];
+        response = energy.length > 0
+          ? `Energy & inputs update: ${energy.map((e) => `${e.name} at ${e.price} ${e.unit} (WoW: ${e.wow_pct > 0 ? "+" : ""}${e.wow_pct}%)`).join(", ")}.`
+          : "Energy data is currently loading. Please try again shortly.";
+      } else if (lowerMsg.includes("land") || lowerMsg.includes("farm")) {
+        const land = data.sections.rural_land?.indicators || [];
+        response = land.length > 0
+          ? `Rural land update: ${land.map((l) => `${l.name} at $${l.price.toLocaleString()} ${l.unit} (YoY: ${l.yoy_pct > 0 ? "+" : ""}${l.yoy_pct}%)`).join(", ")}.`
+          : "Land data is currently loading. Please try again shortly.";
+      } else if (lowerMsg.includes("usd") || lowerMsg.includes("eur") || lowerMsg.includes("exchange") || lowerMsg.includes("currency")) {
+        const fx = data.snapshot.find((i) => i.id === "usd-eur");
+        response = fx
+          ? `USD/EUR exchange rate is currently ${fx.price} (WoW: ${fx.wow_pct > 0 ? "+" : ""}${fx.wow_pct}%, YoY: ${fx.yoy_pct > 0 ? "+" : ""}${fx.yoy_pct}%). ${fx.source === "Live" ? "This is a live rate." : "This is a cached rate."}`
+          : "Exchange rate data is currently unavailable.";
+      } else {
+        response = `Based on today's market data: ${data.todays_signal.text} Feel free to ask about specific sectors like grains, livestock, dairy, energy, land, or currency.`;
+      }
+      return res.json({ message: response });
+    } catch (err: any) {
+      console.error("[ai/chat] Error:", err.message);
+      return res.status(500).json({ message: "Sorry, I encountered an error processing your request. Please try again." });
+    }
+  });
+
   return httpServer;
 }
