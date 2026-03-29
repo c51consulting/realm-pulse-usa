@@ -13,6 +13,7 @@ import {
   RefreshCw, Calendar, ChevronUp, ChevronDown, Database, Menu, X, Sparkles, CheckCircle2,
   Lock, User, Mail, ArrowRight,
 } from "lucide-react";
+import { PulseAIWidget } from "@/components/PulseAIWidget";
 
 // ── Types ──
 
@@ -810,14 +811,7 @@ export default function Dashboard() {
         )}
       </div>
 
-      {/* ═══ FLOATING AI BUTTON ═══ */}
-      <button
-        className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-[#D4A017] text-white shadow-lg hover:scale-110 transition-transform z-50 flex items-center justify-center text-xl font-bold"
-        data-testid="ai-button"
-        title="PULSE PRO AI"
-      >
-        ✦
-      </button>
+      <PulseAIWidget />
 
       {/* ═══ REGISTRATION MODAL ═══ */}
       <RegistrationModal
