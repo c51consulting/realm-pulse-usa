@@ -32,7 +32,7 @@ const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
 
 function getSeedIndicators(): Indicator[] {
   return [
-    { id: "usd-aud", name: "USD/AUD", price: 1.5762, unit: "", wow_pct: 0.3, yoy_pct: -2.1, source: "Cached", source_detail: "Exchange Rate API", category: "snapshot" },
+    { id: "usd-eur", name: "USD/EUR", price: 0.9200, unit: "", wow_pct: 0.3, yoy_pct: -2.1, source: "Cached", source_detail: "Exchange Rate API", category: "snapshot" },
     { id: "cbot-corn", name: "CBOT Corn", price: 466, unit: "¢/bu", wow_pct: -1.2, yoy_pct: 5.4, source: "Cached", source_detail: "CME Group / Trading Economics", category: "grains" },
     { id: "cbot-wheat", name: "CBOT Wheat", price: 605, unit: "¢/bu", wow_pct: 2.1, yoy_pct: -3.8, source: "Cached", source_detail: "CME Group / Trading Economics", category: "grains" },
     { id: "cbot-soybeans", name: "CBOT Soybeans", price: 1045, unit: "¢/bu", wow_pct: -0.8, yoy_pct: 1.2, source: "Cached", source_detail: "CME Group / Trading Economics", category: "grains" },
@@ -68,7 +68,7 @@ async function fetchExchangeRate(): Promise<{ rate: number; wow_pct: number } | 
     clearTimeout(timeout);
     if (!res.ok) return null;
     const data = await res.json();
-    const rate = data.rates?.AUD;
+    const rate = data.rates?.EUR;
     if (!rate) return null;
     return { rate: parseFloat(rate.toFixed(4)), wow_pct: 0.3 };
   } catch {
@@ -84,10 +84,10 @@ async function buildMarketData(): Promise<MarketDataResponse> {
   // Try live exchange rate
   const liveRate = await fetchExchangeRate();
   if (liveRate) {
-    const usdAud = indicators.find((i) => i.id === "usd-aud");
-    if (usdAud) {
-      usdAud.price = liveRate.rate;
-      usdAud.source = "Live";
+    const usdEur = indicators.find((i) => i.id === "usd-eur");
+    if (usdEur) {
+      usdEur.price = liveRate.rate;
+      usdEur.source = "Live";
     }
   }
 
@@ -111,7 +111,7 @@ async function buildMarketData(): Promise<MarketDataResponse> {
 
   // Snapshot: key indicators for the summary table
   const snapshotIds = [
-    "usd-aud", "cbot-corn", "cbot-wheat", "cbot-soybeans",
+    "usd-eur", "cbot-corn", "cbot-wheat", "cbot-soybeans",
     "cme-live-cattle", "cme-feeder-cattle", "cme-lean-hogs",
     "class-iii-milk", "wti-crude-oil", "diesel-national-avg", "urea-gulf-fob",
   ];
