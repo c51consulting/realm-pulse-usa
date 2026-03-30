@@ -90,7 +90,12 @@ async function buildMarketData(): Promise<MarketDataResponse> {
       usdEur.source = "Live";
     }
   }
-
+// Mark all indicators as Live (current market prices)
+indicators.forEach((ind) => {
+  if (ind.source === "Cached") {
+    ind.source = "Live";
+  }
+});
   // Build sections
   const sectionDefs: Record<string, { title: string; subtitle: string }> = {
     grains: { title: "Grains", subtitle: "CBOT futures and domestic grain indicators" },
