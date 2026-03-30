@@ -273,34 +273,44 @@ export async function registerRoutes(
     }
   });
 
-    // POST /api/stripe/create-checkout - Create Stripe checkout session
+
+    // POST /api/stripe/create-checkout - Create Stripe checkout session (no SDK)
   app.post("/api/stripe/create-checkout", async (req, res) => {
     try {
-      const Stripe = (await import("stripe")).default;
-      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
-        apiVersion: "2025-02-24.acacia" as any,
-      });
       const { plan } = req.body;
       const priceId = process.env.STRIPE_PRICE_ID;
-      if (!priceId) {
+      const secretKey = process.env.STRIPE_SECRET_KEY;
+      if (!priceId || !secretKey) {
         return res.status(500).json({ error: "Stripe not configured" });
       }
       const baseUrl = process.env.RAILWAY_PUBLIC_DOMAIN
         ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`
         : "http://localhost:3000";
-      const session = await stripe.checkout.sessions.create({
-        mode: "subscription",
-        line_items: [{ price: priceId, quantity: 1 }],
-        success_url: `${baseUrl}/?upgraded=true`,
-        cancel_url: `${baseUrl}/?upgrade=cancelled`,
-        metadata: { plan: plan || "monthly" },
+      const params = new URLSearchParams();
+      params.append("mode", "subscription");
+      params.append("line_items[0][price]", priceId);
+      params.append("line_items[0][quantity]", "1");
+      params.append("success_url", `${baseUrl}/?upgraded=true`);
+      params.append("cancel_url", `${baseUrl}/?upgrade=cancelled`);
+      params.append("metadata[plan]", plan || "monthly");
+      const stripeRes = await fetch("https://api.stripe.com/v1/checkout/sessions", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${secretKey}`,
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: params.toString(),
       });
+      const session = await stripeRes.json();
+      if (!stripeRes.ok) {
+        console.error("[stripe] API error:", session);
+        return res.status(500).json({ error: session.error?.message || "Stripe error" });
+      }
       return res.json({ url: session.url });
     } catch (err: any) {
       console.error("[stripe] Checkout error:", err.message);
       return res.status(500).json({ error: "Failed to create checkout session" });
     }
   });
-
   return httpServer;
 }
