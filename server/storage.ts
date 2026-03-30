@@ -2,8 +2,13 @@ import { type User, type InsertUser, users } from "@shared/schema";
 import { drizzle } from "drizzle-orm/better-sqlite3";
 import Database from "better-sqlite3";
 import { eq } from "drizzle-orm";
+import { mkdirSync, existsSync } from "fs";
 
-const sqlite = new Database("/app/data/data.db");
+const dbDir = "/app/data";
+if (!existsSync(dbDir)) {
+  mkdirSync(dbDir, { recursive: true });
+}
+const sqlite = new Database(`${dbDir}/data.db`);
 sqlite.pragma("journal_mode = WAL");
 
 export const db = drizzle(sqlite);
