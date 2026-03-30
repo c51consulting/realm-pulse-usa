@@ -1,3 +1,4 @@
+import { storage } from "./storage";
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 
@@ -467,6 +468,62 @@ export async function registerRoutes(
       console.error("[stripe] Checkout error:", err.message);
       return res.status(500).json({ error: "Failed to create checkout session" });
     }
+  });
+   // POST /api/auth/register
+  app.post("/api/auth/register", async (req, res) => {
+    try {
+      const { username, password } = req.body;
+      
+      if (!username || !password) {
+        return res.status(400).json({ error: "Username and password are required" });
+      }
+      
+      // Check if username already exists
+      const existing = await storage.getUserByUsername(username);
+      if (existing) {
+        return res.status(400).json({ error: "Username already taken" });
+      }
+      
+      // Create user
+      const user = await storage.createUser({ username, password });
+      return res.status(201).json({ id: user.id, username: user.username });
+    } catch (err: any) {
+      console.error("[auth/register] Error:", err.message);
+      return res.status(500).json({ error: "Registration failed" });
+    }
+  });
+
+  // POST /api/auth/login
+  app.post("/api/auth/login", async (req, res) => {
+    try {
+      const { username, password } = req.body;
+      
+      if (!username || !password) {
+        return res.status(400).json({ error: "Username and password are required" });
+      }
+      
+      // Look up user
+      const user = await storage.getUserByUsername(username);
+      if (!user) {
+        return res.status(401).json({ error: "Invalid credentials" });
+      }
+      
+      // Check password (simple comparison - NOT production-safe)
+      if (user.password !== password) {
+        return res.status(401).json({ error: "Invalid credentials" });
+      }
+      
+      return res.json({ id: user.id, username: user.username });
+    } catch (err: any) {
+      console.error("[auth/login] Error:", err.message);
+      return res.status(500).json({ error: "Login failed" });
+    }
+  });
+
+  // GET /api/auth/me
+  app.get("/api/auth/me", async (_req, res) => {
+    // Placeholder - will implement session/JWT later
+    return res.json({ message: "Not authenticated" });
   });
   return httpServer;
 }
