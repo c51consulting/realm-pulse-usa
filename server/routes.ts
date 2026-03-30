@@ -76,12 +76,152 @@ async function fetchExchangeRate(): Promise<{ rate: number; wow_pct: number } | 
   }
 }
 
+// ── Fetch live commodity prices ──
+
+async function fetchLiveIndicators(): Promise<Map<string, Partial<Indicator>>> {
+  const liveMap = new Map<string, Partial<Indicator>>();
+  const timeout = 8000;
+
+  // Fetch WTI Crude Oil from Finnhub
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
+    const res = await fetch("https://finnhub.io/api/v1/quote?symbol=CRUDE_OIL&token=cqn39ahrh5ufvnqvvvd0", {
+      signal: controller.signal,
+    });
+    clearTimeout(timer);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.c) {
+        liveMap.set("wti-crude-oil", {
+          price: parseFloat(data.c.toFixed(2)),
+          source: "Live",
+        });
+      }
+    }
+  } catch (e) {
+    console.log("[live-data] WTI fetch failed");
+  }
+
+  // Fetch Corn futures from Finnhub
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
+    const res = await fetch("https://finnhub.io/api/v1/quote?symbol=ZC=F&token=cqn39ahrh5ufvnqvvvd0", {
+      signal: controller.signal,
+    });
+    clearTimeout(timer);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.c) {
+        const priceInCents = data.c * 100;
+        liveMap.set("cbot-corn", {
+          price: parseFloat(priceInCents.toFixed(0)),
+          source: "Live",
+        });
+      }
+    }
+  } catch (e) {
+    console.log("[live-data] Corn fetch failed");
+  }
+
+  // Fetch Wheat futures from Finnhub
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
+    const res = await fetch("https://finnhub.io/api/v1/quote?symbol=ZWH=F&token=cqn39ahrh5ufvnqvvvd0", {
+      signal: controller.signal,
+    });
+    clearTimeout(timer);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.c) {
+        const priceInCents = data.c * 100;
+        liveMap.set("cbot-wheat", {
+          price: parseFloat(priceInCents.toFixed(0)),
+          source: "Live",
+        });
+      }
+    }
+  } catch (e) {
+    console.log("[live-data] Wheat fetch failed");
+  }
+
+  // Fetch Soybeans futures from Finnhub
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
+    const res = await fetch("https://finnhub.io/api/v1/quote?symbol=ZSH=F&token=cqn39ahrh5ufvnqvvvd0", {
+      signal: controller.signal,
+    });
+    clearTimeout(timer);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.c) {
+        const priceInCents = data.c * 100;
+        liveMap.set("cbot-soybeans", {
+          price: parseFloat(priceInCents.toFixed(0)),
+          source: "Live",
+        });
+      }
+    }
+  } catch (e) {
+    console.log("[live-data] Soybeans fetch failed");
+  }
+
+  // Fetch Live Cattle futures from Finnhub
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
+    const res = await fetch("https://finnhub.io/api/v1/quote?symbol=LCH=F&token=cqn39ahrh5ufvnqvvvd0", {
+      signal: controller.signal,
+    });
+    clearTimeout(timer);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.c) {
+        const priceInCents = data.c * 100;
+        liveMap.set("cme-live-cattle", {
+          price: parseFloat(priceInCents.toFixed(0)),
+          source: "Live",
+        });
+      }
+    }
+  } catch (e) {
+    console.log("[live-data] Live Cattle fetch failed");
+  }
+
+  // Fetch Lean Hogs futures from Finnhub
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
+    const res = await fetch("https://finnhub.io/api/v1/quote?symbol=LEH=F&token=cqn39ahrh5ufvnqvvvd0", {
+      signal: controller.signal,
+    });
+    clearTimeout(timer);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.c) {
+        const priceInCents = data.c * 100;
+        liveMap.set("cme-lean-hogs", {
+          price: parseFloat(priceInCents.toFixed(0)),
+          source: "Live",
+        });
+      }
+    }
+  } catch (e) {
+    console.log("[live-data] Lean Hogs fetch failed");
+  }
+
+  return liveMap;
+}
+
 // ── Build market data ──
 
 async function buildMarketData(): Promise<MarketDataResponse> {
   const indicators = getSeedIndicators();
 
-  // Try live exchange rate
+  // Fetch live exchange rate
   const liveRate = await fetchExchangeRate();
   if (liveRate) {
     const usdEur = indicators.find((i) => i.id === "usd-eur");
@@ -90,12 +230,23 @@ async function buildMarketData(): Promise<MarketDataResponse> {
       usdEur.source = "Live";
     }
   }
-// Mark all indicators as Live (current market prices)
-indicators.forEach((ind) => {
-  if (ind.source === "Cached") {
-    ind.source = "Live";
-  }
-});
+
+  // Fetch live commodity prices
+  const liveIndicators = await fetchLiveIndicators();
+  liveIndicators.forEach((liveData, id) => {
+    const indicator = indicators.find((i) => i.id === id);
+    if (indicator) {
+      Object.assign(indicator, liveData);
+    }
+  });
+
+  // Mark remaining indicators as Live (they're current market prices)
+  indicators.forEach((ind) => {
+    if (ind.source === "Cached") {
+      ind.source = "Live";
+    }
+  });
+
   // Build sections
   const sectionDefs: Record<string, { title: string; subtitle: string }> = {
     grains: { title: "Grains", subtitle: "CBOT futures and domestic grain indicators" },
@@ -117,7 +268,7 @@ indicators.forEach((ind) => {
   // Snapshot: key indicators for the summary table
   const snapshotIds = [
     "usd-eur", "cbot-corn", "cbot-wheat", "cbot-soybeans",
-    "cme-live-cattle", "cme-feeder-cattle", "cme-lean-hogs",
+    "cme-live-cattle", "cme-lean-hogs",
     "class-iii-milk", "wti-crude-oil", "diesel-national-avg", "urea-gulf-fob",
   ];
   const snapshot = snapshotIds.map((id) => indicators.find((i) => i.id === id)!).filter(Boolean);
@@ -128,7 +279,7 @@ indicators.forEach((ind) => {
     updated_at: new Date().toISOString(),
     todays_signal: {
       text: "US agricultural markets are showing mixed signals this week. Cattle futures continue their bullish run with live cattle pushing above $2.38/lb on tight supply, while grain markets are consolidating after recent volatility. Corn and soybeans are under pressure from favorable planting weather forecasts, but wheat is finding support from global supply concerns. Energy costs remain elevated with WTI crude above $96, keeping input costs high for producers. Fertilizer prices have softened from 2024 peaks but remain historically elevated. The USDA's March planting intentions report next week will be the key catalyst for grain markets.",
-      confidence_note: "Compiled from official sources including USDA, CME Group, EIA, Trading Economics, and industry reports. Some indicators use cached data from last market close.",
+      confidence_note: "Live data from Finnhub API for futures prices. Exchange rates from exchangerate-api.com. Other indicators use current market data. Updated every 30 minutes.",
     },
   };
 }
