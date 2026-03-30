@@ -10,6 +10,22 @@ export function PulseAIWidget() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const handleUpgrade = async (plan: "monthly" | "annual") => {
+    try {
+      const res = await fetch("/api/stripe/create-checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch (err) {
+      console.error("Checkout error:", err);
+    }
+  };
+
   const handleSendMessage = async (content: string) => {
     setMessages((prev) => [...prev, { role: "user", content }]);
     setIsLoading(true);
@@ -41,7 +57,7 @@ export function PulseAIWidget() {
         </button>
       )}
 
-      {/* Upgrade Prompt — matches AUS site */}
+      {/* Upgrade Prompt */}
       {showUpgrade && (
         <div className="fixed bottom-6 right-6 w-80 bg-gray-900 border border-amber-500/30 rounded-2xl shadow-2xl z-50 overflow-hidden">
           <div className="bg-gradient-to-r from-amber-500 to-amber-600 p-4 flex items-center justify-between">
@@ -68,11 +84,13 @@ export function PulseAIWidget() {
             <div className="space-y-2">
               <button
                 className="w-full py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 text-white font-semibold rounded-lg hover:from-amber-600 hover:to-amber-700 transition-all"
+                onClick={() => handleUpgrade("monthly")}
               >
                 $29/month
               </button>
               <button
                 className="w-full py-2.5 bg-transparent border border-amber-500/40 text-amber-400 font-semibold rounded-lg hover:bg-amber-500/10 transition-all text-sm"
+                onClick={() => handleUpgrade("annual")}
               >
                 $299/year (save 14%)
               </button>
